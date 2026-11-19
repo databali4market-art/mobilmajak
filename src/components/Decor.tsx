@@ -64,3 +64,24 @@ export function Celebrate({ burst }: { burst: number }) {
     </div>
   );
 }
+
+/** Světelný řetěz: žárovky na prověšeném drátku, které se střídavě rozsvěcují. */
+export function Lights({ count = 16, className = '' }: { count?: number; className?: string }) {
+  const colors = ['#ea1d63', '#ffd166', '#2bb3e6', '#3ddc84'];
+  return (
+    <div className={'lights ' + className} aria-hidden="true" style={{ ['--n' as string]: count }}>
+      {Array.from({ length: count }, (_, i) => (
+        <span key={i} className="bulb"><i style={{ background: colors[i % 4], color: colors[i % 4], animationDelay: `${(i % 4) * 0.45}s` }} /></span>
+      ))}
+    </div>
+  );
+}
+
+/** Závěj sněhu – vlnitý okraj sekce. */
+export function Drift({ className = '' }: { className?: string }) {
+  return (
+    <svg className={'drift ' + className} viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 80V46c60-26 110-30 170-8 70 26 120 22 190-6 70-26 120-24 190 2 72 28 124 26 200-4 66-26 126-26 190 0 70 28 130 26 200-4 56-24 100-24 150-8 50 14 100 12 150-4v56Z" fill="currentColor" />
+    </svg>
+  );
+}

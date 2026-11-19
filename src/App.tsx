@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, ArrowUpRight, Eye, Gift, LogIn, Phone, Share2, Sparkles, Store, Wrench, Smartphone } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Eye, Gift, Snowflake, LogIn, Phone, Share2, Sparkles, Store, Wrench, Smartphone } from 'lucide-react';
 import { availableDay, BASE, CONTEST_DAYS, doors as ALL_DOORS, PHONE, SHOP } from './content';
 import { CONTENT_MODE, DEMO_MODE, PREVIEW_KEY } from './config';
 import { backend } from './backend';
@@ -8,7 +8,7 @@ import { DoorGrid } from './components/DoorGrid';
 import { DoorModal } from './components/DoorModal';
 import { LoginDialog } from './components/LoginDialog';
 import { GiftsDrawer } from './components/GiftsDrawer';
-import { Celebrate, Logo, Snow } from './components/Decor';
+import { Celebrate, Drift, Lights, Logo, Snow } from './components/Decor';
 
 const EVE = Date.parse('2026-12-24T00:00:00+01:00');
 const draft = CONTENT_MODE !== 'live';
@@ -180,9 +180,10 @@ export default function App() {
       {/* ------------------------------------------------------------- HERO */}
       <section className="hero">
         <Snow />
+        <Lights className="hero-lights" count={22} />
         <div className="wrap hero-grid">
           <div className="hero-copy">
-            <div className="eyebrow light">Adventní kalendář 2026</div>
+            <div className="eyebrow light"><Snowflake size={15} /> Adventní kalendář 2026</div>
             <h1><span className="hl">Advent</span><br />plný slev, her<br />a překvapení</h1>
             <p>24 dní, 24 okének. Každý den o půlnoci se odemkne nová nabídka, hra, tip nebo soutěž. Odměny na vás čekají na pobočkách Mobil Maják.</p>
             <div className="hero-cta">
@@ -205,6 +206,7 @@ export default function App() {
             ))}
           </div>
         </div>
+        <Drift className="hero-drift" />
       </section>
 
       {/* --------------------------------------------------------- CALENDAR */}
@@ -248,7 +250,8 @@ export default function App() {
         </section>
 
         <section className="closing">
-          <Sparkles size={28} />
+          <Drift className="closing-drift" />
+          <Snowflake size={30} />
           <h2>Krásný advent přeje <span className="hl">tým Mobil Maják</span></h2>
         </section>
       </main>

@@ -83,7 +83,7 @@ button { cursor: pointer; }
 .hide-sm { }
 
 /* ---------- hero ---------- */
-.hero { position: relative; overflow: hidden; background: radial-gradient(900px 500px at 85% 20%, #2f4aa0 0%, transparent 60%), var(--navy); color: #fff; padding: 64px 0 40px; }
+.hero { position: relative; overflow: hidden; padding-bottom: 96px !important; background: radial-gradient(900px 500px at 85% 20%, #2f4aa0 0%, transparent 60%), var(--navy); color: #fff; padding: 84px 0 40px; }
 .snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .hero-grid { position: relative; display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center; }
 .hero h1 { font-size: clamp(40px, 6vw, 72px); margin: 16px 0 20px; }
@@ -332,3 +332,50 @@ input:focus, textarea:focus { border-color: var(--cyan); outline: 0; }
   .tile-label { font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; } }
+
+/* ---------- vánoční výzdoba ---------- */
+:root { --gold: #ffd166; --pine: #1f7a4d; }
+.lights { overflow: hidden; position: absolute; left: 0; right: 0; top: 0; display: flex; pointer-events: none; z-index: 2; }
+.bulb { position: relative; flex: 1; height: 52px; }
+.bulb::before { content: ''; position: absolute; top: -14px; left: -50%; width: 100%; height: 26px; border-bottom: 2px solid #0b1228; border-radius: 0 0 50% 50%; }
+.hero .bulb::before { border-color: rgba(255,255,255,.35); }
+.bulb i { position: absolute; left: 50%; top: 10px; width: 12px; height: 18px; margin-left: -6px; border-radius: 6px 6px 8px 8px; box-shadow: 0 0 14px 3px currentColor; animation: glow 2.4s ease-in-out infinite; }
+.bulb i::before { content: ''; position: absolute; left: 2px; top: -5px; width: 8px; height: 6px; border-radius: 2px; background: #0b1228; }
+@keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: .35; box-shadow: 0 0 4px 0 currentColor; } }
+.phone-lights { top: -2px; left: 18px; right: 18px; }
+.phone-lights .bulb { height: 44px; }
+.phone-bar { padding-top: 34px; }
+.notch { display: none; }
+.drift { position: absolute; left: 0; width: 100%; height: 60px; display: block; }
+.hero-drift { bottom: -1px; color: var(--bg); z-index: 1; }
+.closing { position: relative; padding-top: 90px; }
+.closing-drift { top: -1px; left: 0; color: var(--bg); transform: scaleY(-1); }
+.eyebrow svg { flex: none; }
+
+/* okénka jako zabalené dárky */
+.tile { overflow: visible; border-radius: 20px; }
+.tile::before, .tile::after { content: ''; position: absolute; background: linear-gradient(180deg, #fff3c4, var(--gold)); pointer-events: none; }
+.tile::before { left: 50%; top: 0; bottom: 0; width: 14px; margin-left: -7px; border-radius: 2px; }
+.tile::after { top: 50%; left: 0; right: 0; height: 14px; margin-top: -7px; border-radius: 2px; }
+.tile.opened::before, .tile.opened::after { display: none; }
+.tile-num { z-index: 3; left: 6px; top: 6px; min-width: 26px; height: 24px; padding: 0 6px; border-radius: 999px; background: #fff; color: var(--navy); display: grid; place-items: center; font-size: 14px; text-shadow: none; box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+.tile-ico { display: none; }
+.tile.opened .tile-ico { display: block; margin-top: 0; }
+.bow { position: absolute; z-index: 2; left: 50%; top: -12px; width: 0; height: 0; }
+.bow::before, .bow::after { content: ''; position: absolute; top: -2px; width: 22px; height: 16px; border: 4px solid var(--gold); border-radius: 50% 50% 50% 50%; background: transparent; }
+.bow::before { right: 1px; transform: rotate(-28deg); }
+.bow::after { left: 1px; transform: rotate(28deg); }
+.tile.locked::before, .tile.locked::after, .tile.locked .bow::before, .tile.locked .bow::after { filter: grayscale(1) brightness(.6); opacity: .8; }
+.tile.locked .bow::before, .tile.locked .bow::after { background: none; }
+.tile-lock { position: absolute; z-index: 3; right: 6px; bottom: 6px; width: 22px; height: 22px; border-radius: 50%; background: #11193f; color: #aeb8e6; display: grid; place-items: center; }
+.tile-tick { z-index: 3; }
+.tile-badge { z-index: 4; }
+.tile.opened { background: linear-gradient(160deg, color-mix(in srgb, var(--c) 70%, #fff), var(--c)); }
+.tile.opened .tile-num { background: var(--gold); }
+
+/* okno: ozdobná stuha a sníh */
+.modal-head .snow { z-index: 0; }
+.ribbon { position: absolute; z-index: 1; top: 0; bottom: 0; right: 46px; width: 26px; background: linear-gradient(90deg, #fff3c4, var(--gold) 50%, #fff3c4); box-shadow: 0 0 20px rgba(0,0,0,.2); }
+.ribbon i { position: absolute; left: 50%; bottom: 36px; width: 40px; height: 40px; margin-left: -20px; border-radius: 50%; background: var(--gold); box-shadow: inset 0 -6px 0 rgba(0,0,0,.1); }
+.modal-day, .modal-glyph { z-index: 2; }
+@media (max-width: 860px) { .ribbon { right: 90px; width: 20px; } .ribbon i { display: none; } }

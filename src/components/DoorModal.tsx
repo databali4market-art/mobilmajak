@@ -3,6 +3,7 @@ import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Copy, Share
 import type { Door } from '../types';
 import { LABELS, typeIcon } from './DoorGrid';
 import { GameView } from './Games';
+import { Snow } from './Decor';
 
 interface Props {
   door: Door | null;
@@ -50,6 +51,8 @@ export function DoorModal({ door, draft, entered, canPrev, canNext, onPrev, onNe
         <div className="modal-card" key={door.day}>
           <button className="modal-close" aria-label="Zavřít" onClick={onClose}><X size={20} /></button>
           <div className={'modal-head t-' + door.type}>
+            <Snow count={26} />
+            <span className="ribbon" aria-hidden="true"><i /></span>
             <div className="modal-day"><strong>{door.day}</strong><span>prosince</span></div>
             <div className="modal-glyph">{typeIcon(door.type, 56)}</div>
           </div>
