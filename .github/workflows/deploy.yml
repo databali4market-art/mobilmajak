@@ -33,5 +33,12 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-      - if: env.HAS_KEY == 'true'
-        run: npx --yes firebase-tools@15 deploy --only hosting,firestore:rules --project "${{ vars.FIREBASE_PROJECT_ID || 'mobil-majak' }}" --non-interactive
+      - name: Nasazení webu (Hosting)
+        if: env.HAS_KEY == 'true'
+        run: npx --yes firebase-tools@15 deploy --only hosting --project "${{ vars.FIREBASE_PROJECT_ID || 'mobil-majak' }}" --non-interactive
+      # Pravidla databáze: servisní účet potřebuje navíc roli „Service Usage Consumer“ (viz README).
+      # Když ji nemá, web se přesto nasadí a pravidla lze vložit ručně v konzoli.
+      - name: Nasazení pravidel databáze (firestore.rules)
+        if: env.HAS_KEY == 'true'
+        continue-on-error: true
+        run: npx --yes firebase-tools@15 deploy --only firestore:rules --project "${{ vars.FIREBASE_PROJECT_ID || 'mobil-majak' }}" --non-interactive
