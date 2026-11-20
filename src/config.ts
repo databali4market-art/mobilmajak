@@ -17,7 +17,7 @@ export const FIREBASE = {
 };
 
 /** 'draft' = u nabídek a soutěží se ukazují poznámky „k potvrzení“. Před spuštěním přepněte na 'live'. */
-export const CONTENT_MODE: 'draft' | 'live' = 'draft';
+export const CONTENT_MODE: 'draft' | 'live' = 'live';
 
 /**
  * Klíč pro náhled všech okének před 1. prosincem: otevřete web s ?nahled=KLÍČ
@@ -32,7 +32,7 @@ export const firebaseEnabled = () => !!FIREBASE.apiKey && !!FIREBASE.projectId;
  * true = vše je odemčené a dá se proklikat bez přihlášení (postup se ukládá jen v prohlížeči).
  * Před ostrým spuštěním kampaně přepněte na false.
  */
-export const DEMO_MODE = true;
+export const DEMO_MODE = false;
 
 /**
  * Kdo smí na stránce /?admin stahovat e-maily a soutěžní odpovědi (Google účty, malými písmeny).
