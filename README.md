@@ -46,8 +46,8 @@ Stačí bezplatný tarif Firebase (Spark). Kalendář má mít vlastní Firebase
 
 Workflow `.github/workflows/deploy.yml` po každém pushi do `main` sestaví web a nasadí ho i s `firestore.rules` do projektu `mobil-majak`. Potřebuje jedno nastavení v GitHubu (repo → Settings → Secrets and variables → Actions). Dokud chybí, nasazení se přeskočí.
 
-1. **Secrets** → `FIREBASE_SERVICE_ACCOUNT` = JSON klíč servisního účtu:
-   Firebase Console → Project settings → *Service accounts* → odkaz *Manage service account permissions* (Google Cloud) → *Create service account* → název `github-deploy` → role **Firebase Admin** → Done → u účtu *Keys → Add key → JSON* → obsah staženého souboru vložit do secretu. Soubor pak smažte.
+1. **Secrets** → `FIREBASE_SERVICE_ACCOUNT` = JSON klíč: Firebase Console → Project settings → *Service accounts* → **Generate new private key** → obsah souboru vložit do secretu, soubor smazat.
+2. Aby se nasazovala i pravidla databáze, potřebuje tento účet (`firebase-adminsdk-…@mobil-majak.iam.gserviceaccount.com`) navíc roli **Service Usage Consumer**: [Google Cloud → IAM](https://console.cloud.google.com/iam-admin/iam?project=mobil-majak) → u účtu tužka → *Add another role* → Service Usage Consumer → Save. Bez ní se nasadí jen web.
 
 Ruční nasazení z počítače: `npm run build && npx firebase-tools deploy --only hosting,firestore:rules --project mobil-majak`.
 
