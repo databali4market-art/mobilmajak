@@ -71,7 +71,6 @@ export default function App() {
 
   useEffect(() => {
     let off: (() => void) | undefined;
-    backend.completeEmailLink().then((ok) => ok && notify('Jste přihlášeni. Hezký advent!')).catch((e) => notify((e as Error).message));
     backend.watch((u) => { setUser(u); setAuthReady(true); }).then((f) => { off = f; });
     return () => off?.();
   }, [notify]);
@@ -237,7 +236,7 @@ export default function App() {
         <section className="how wrap">
           <h2>Jak to funguje</h2>
           <ol>
-            <li><b>1</b><div><strong>Přihlaste se</strong><span>Přes Google nebo odkaz do e-mailu. Za pár vteřin.</span></div></li>
+            <li><b>1</b><div><strong>Přihlaste se</strong><span>Jedním klikem přes Google.</span></div></li>
             <li><b>2</b><div><strong>Otevírejte okénka</strong><span>Každý den o půlnoci se odemkne nové.</span></div></li>
             <li><b>3</b><div><strong>Využijte kupón</strong><span>Ukažte ho na pobočce u pultu.</span></div></li>
           </ol>

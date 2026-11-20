@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Mail, MailCheck, X } from 'lucide-react';
+import { ArrowRight, Mail, X } from 'lucide-react';
 import { backend } from '../backend';
+import { NEWSLETTER_CONSENT } from '../config';
 import { Logo } from './Decor';
 
 interface Props {
@@ -25,33 +26,31 @@ export function LoginDialog({ open, reason, onClose, onSignedIn }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const [email, setEmail] = useState('');
   const [newsletter, setNewsletter] = useState(false);
-  const [busy, setBusy] = useState<'' | 'google' | 'email'>('');
-  const [sent, setSent] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const d = ref.current!;
-    if (open && !d.open) { d.showModal(); setSent(false); setError(''); }
+    if (open && !d.open) { d.showModal(); setError(''); }
     if (!open && d.open) d.close();
   }, [open]);
 
   const fb = backend.mode === 'firebase';
 
   async function google() {
-    setBusy('google'); setError('');
+    setBusy(true); setError('');
     try { await backend.signInGoogle(newsletter); onSignedIn(); }
     catch (e) { setError((e as Error).message); }
-    finally { setBusy(''); }
+    finally { setBusy(false); }
   }
 
+  /** jen ukázkový režim bez Firebase */
   async function byEmail(e: React.FormEvent) {
     e.preventDefault();
-    setBusy('email'); setError('');
-    try {
-      const r = await backend.signInEmail(email.trim(), newsletter);
-      if (r === 'sent') setSent(true); else onSignedIn();
-    } catch (er) { setError((er as Error).message); }
-    finally { setBusy(''); }
+    setBusy(true); setError('');
+    try { await backend.signInEmail(email.trim(), newsletter); onSignedIn(); }
+    catch (er) { setError((er as Error).message); }
+    finally { setBusy(false); }
   }
 
   return (
@@ -59,46 +58,32 @@ export function LoginDialog({ open, reason, onClose, onSignedIn }: Props) {
       <div className="login-card">
         <button className="modal-close" aria-label="Zavřít" onClick={onClose}><X size={20} /></button>
         <div className="login-logo"><Logo /></div>
-        {sent ? (
-          <div className="login-sent" role="status">
-            <MailCheck size={44} />
-            <h2 id="login-title">Mrkněte do e-mailu</h2>
-            <p>Na adresu <b>{email}</b> jsme poslali odkaz pro přihlášení. Stačí na něj kliknout – a jste uvnitř.</p>
-            <small>Nic nepřišlo? Zkontrolujte složku Hromadné nebo Spam, případně <button className="link" onClick={() => setSent(false)}>zkuste to znovu</button>.</small>
-          </div>
+        <div className="eyebrow center">Váš adventní kalendář</div>
+        <h2 id="login-title">{reason || 'Přihlaste se a otevírejte okénka'}</h2>
+        <p className="login-lead">Otevřená okénka a kupóny si pamatujeme za vás, najdete je kdykoli v sekci Moje kupóny na mobilu i počítači.</p>
+
+        {fb ? (
+          <button className="btn google" onClick={google} disabled={busy}>
+            <GoogleIcon /> {busy ? 'Přihlašuji…' : 'Pokračovat přes Google'}
+          </button>
         ) : (
-          <>
-            <div className="eyebrow center">Váš adventní kalendář</div>
-            <h2 id="login-title">{reason || 'Přihlaste se a otevírejte okénka'}</h2>
-            <p className="login-lead">Otevřená okénka a kupóny si pamatujeme za vás, najdete je na mobilu i počítači.</p>
-
-            {fb && (
-              <button className="btn google" onClick={google} disabled={!!busy}>
-                <GoogleIcon /> {busy === 'google' ? 'Přihlašuji…' : 'Pokračovat přes Google'}
-              </button>
-            )}
-            {fb && <div className="or"><span>nebo e-mailem</span></div>}
-
-            <form onSubmit={byEmail} className="login-form">
-              <label htmlFor="login-email" className="sr-only">E-mail</label>
-              <div className="input-icon">
-                <Mail size={18} />
-                <input id="login-email" type="email" required autoComplete="email" placeholder="vas@email.cz" value={email} onChange={(e) => setEmail(e.target.value)} />
-              </div>
-              <button className="btn primary" disabled={!!busy}>
-                {busy === 'email' ? 'Odesílám…' : fb ? 'Poslat přihlašovací odkaz' : 'Vstoupit'} <ArrowRight size={17} />
-              </button>
-            </form>
-
-            <label className="check small">
-              <input type="checkbox" checked={newsletter} onChange={(e) => setNewsletter(e.target.checked)} />
-              <span>Chci občas dostat e-mail s novinkami a nabídkami z Mobil Maják. (Nepovinné, odhlásit se jde kdykoli.)</span>
-            </label>
-            {error && <div className="form-error" role="alert">{error}</div>}
-            {!fb && <p className="legal demo">Ukázkový režim: přihlášení bez ověření, postup se ukládá jen v tomto prohlížeči.</p>}
-            <p className="legal">Přihlášením souhlasíte se zpracováním e-mailu za účelem provozu adventního kalendáře. <a href="#soukromi" onClick={onClose}>Více o soukromí</a></p>
-          </>
+          <form onSubmit={byEmail} className="login-form">
+            <label htmlFor="login-email" className="sr-only">E-mail</label>
+            <div className="input-icon">
+              <Mail size={18} />
+              <input id="login-email" type="email" required autoComplete="email" placeholder="vas@email.cz" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <button className="btn primary" disabled={busy}>Vstoupit <ArrowRight size={17} /></button>
+          </form>
         )}
+
+        <label className="check small">
+          <input type="checkbox" checked={newsletter} onChange={(e) => setNewsletter(e.target.checked)} />
+          <span>{NEWSLETTER_CONSENT.text} (Nepovinné.)</span>
+        </label>
+        {error && <div className="form-error" role="alert">{error}</div>}
+        {!fb && <p className="legal demo">Ukázkový režim: přihlášení bez ověření, postup se ukládá jen v tomto prohlížeči. Na ostrém webu bude jen tlačítko Google.</p>}
+        <p className="legal">Přihlášením souhlasíte se zpracováním e-mailu za účelem provozu adventního kalendáře. <a href="#soukromi" onClick={onClose}>Více o soukromí</a></p>
       </div>
     </dialog>
   );

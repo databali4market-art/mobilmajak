@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Copy, X } from 'lucide-react';
+import { NEWSLETTER_CONSENT } from '../config';
 import type { Door, User } from '../types';
 import { LABELS, typeIcon } from './DoorGrid';
 
@@ -71,7 +72,7 @@ export function GiftsDrawer({ open, user, newsletter, doors, onClose, onPick, on
           <footer>
             <label className="check small">
               <input type="checkbox" checked={newsletter} onChange={(e) => onNewsletter(e.target.checked)} />
-              <span>Posílat mi novinky a nabídky Mobil Maják e-mailem</span>
+              <span>{NEWSLETTER_CONSENT.text}</span>
             </label>
             <button className="link" onClick={onLogout}>Odhlásit se</button>
           </footer>

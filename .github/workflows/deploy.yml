@@ -1,0 +1,32 @@
+# Po každém pushi do main se web sestaví a nasadí na Firebase Hosting (včetně firestore.rules).
+# Potřebuje v GitHubu (Settings → Secrets and variables → Actions):
+#   - proměnnou  FIREBASE_PROJECT_ID       = ID Firebase projektu
+#   - secret     FIREBASE_SERVICE_ACCOUNT  = JSON klíč servisního účtu (role „Firebase Admin“)
+# Postup je v README v sekci Nasazení.
+name: Nasazení na Firebase
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ vars.FIREBASE_PROJECT_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      - run: npx --yes firebase-tools@15 deploy --only hosting,firestore:rules --project "${{ vars.FIREBASE_PROJECT_ID }}" --non-interactive
