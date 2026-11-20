@@ -33,7 +33,7 @@ Stačí bezplatný tarif Firebase (Spark). Kalendář má mít vlastní Firebase
 
 ## Nastavení Firebase (jednorázově, cca 15 minut)
 
-1. **Projekt**: [console.firebase.google.com](https://console.firebase.google.com) → *Add project* → název např. `mobilmajak-advent` (Google Analytics není potřeba).
+1. **Projekt** (hotovo: `mobil-majak`): [console.firebase.google.com](https://console.firebase.google.com) → *Add project* (Google Analytics není potřeba).
 2. **Webová aplikace**: Project settings → *Your apps* → ikona `</>` → název `advent` → zkopírovat objekt `firebaseConfig` do `src/config.ts` (`FIREBASE`). Hodnoty nejsou tajné.
 3. **Přihlášení**: Build → *Authentication* → Get started → *Google* → Enable → vyplnit e-mail podpory → Save.
    Na záložce *Settings → Authorized domains* přidat `advent.mobilmajak.cz`.
@@ -44,13 +44,12 @@ Stačí bezplatný tarif Firebase (Spark). Kalendář má mít vlastní Firebase
 
 ## Nasazení (GitHub → Firebase)
 
-Workflow `.github/workflows/deploy.yml` po každém pushi do `main` sestaví web a nasadí ho i s `firestore.rules`. Potřebuje dvě nastavení v GitHubu (repo → Settings → Secrets and variables → Actions):
+Workflow `.github/workflows/deploy.yml` po každém pushi do `main` sestaví web a nasadí ho i s `firestore.rules` do projektu `mobil-majak`. Potřebuje jedno nastavení v GitHubu (repo → Settings → Secrets and variables → Actions). Dokud chybí, nasazení se přeskočí.
 
-1. **Variables** → `FIREBASE_PROJECT_ID` = ID projektu (Project settings → *Project ID*). Dokud chybí, workflow se přeskočí.
-2. **Secrets** → `FIREBASE_SERVICE_ACCOUNT` = JSON klíč servisního účtu:
+1. **Secrets** → `FIREBASE_SERVICE_ACCOUNT` = JSON klíč servisního účtu:
    Firebase Console → Project settings → *Service accounts* → odkaz *Manage service account permissions* (Google Cloud) → *Create service account* → název `github-deploy` → role **Firebase Admin** → Done → u účtu *Keys → Add key → JSON* → obsah staženého souboru vložit do secretu. Soubor pak smažte.
 
-Ruční nasazení z počítače: `npm run build && npx firebase-tools deploy --only hosting,firestore:rules --project <ID>`.
+Ruční nasazení z počítače: `npm run build && npx firebase-tools deploy --only hosting,firestore:rules --project mobil-majak`.
 
 ## Newsletter a e-maily
 

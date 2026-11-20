@@ -8,12 +8,12 @@
  *    (přihlášení přes Google pak spolehlivě funguje i v Safari / na iPhonu).
  */
 export const FIREBASE = {
-  apiKey: '',
-  authDomain: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: '',
-  appId: '',
+  apiKey: 'AIzaSyDQjGSOrxLNatm-xj059HOyp86qf5lTrko',
+  authDomain: 'mobil-majak.firebaseapp.com',
+  projectId: 'mobil-majak',
+  storageBucket: 'mobil-majak.firebasestorage.app',
+  messagingSenderId: '1098150973300',
+  appId: '1:1098150973300:web:55d8c57bd86893f62ba621',
 };
 
 /** 'draft' = u nabídek a soutěží se ukazují poznámky „k potvrzení“. Před spuštěním přepněte na 'live'. */
