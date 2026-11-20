@@ -39,7 +39,7 @@ export const DEMO_MODE = true;
  * Stejný seznam MUSÍ být i ve firestore.rules (funkce isAdmin), jinak databáze data nevydá.
  */
 export const ADMIN_EMAILS: string[] = [
-  // 'vas.ucet@gmail.com',
+  'databali4market@gmail.com',
 ];
 
 /**
