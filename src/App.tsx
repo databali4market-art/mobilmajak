@@ -8,7 +8,7 @@ import { DoorGrid } from './components/DoorGrid';
 import { DoorModal } from './components/DoorModal';
 import { LoginDialog } from './components/LoginDialog';
 import { GiftsDrawer } from './components/GiftsDrawer';
-import { Celebrate, Drift, Lights, Logo, Snow } from './components/Decor';
+import { BeaconA, Celebrate, Drift, Lights, Logo, Snow } from './components/Decor';
 import { HeroArt } from './components/HeroArt';
 
 const EVE = Date.parse('2026-12-24T00:00:00+01:00');
@@ -252,6 +252,7 @@ export default function App() {
       </main>
 
       <footer className="footer">
+        <BeaconA className="footer-beacon" />
         <div className="wrap">
           <Logo light />
           <div className="footer-links">

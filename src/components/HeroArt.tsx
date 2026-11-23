@@ -5,7 +5,7 @@
  */
 
 const TYPES = ['offer', 'game', 'tip', 'contest'] as const;
-const BULBS = ['#ffd166', '#ea1d63', '#2bb3e6', '#3ddc84'];
+const BULBS = ['#ffd166', '#e40b4d', '#2bb3e6', '#3ddc84'];
 
 type P = [number, number];
 /** bod na kubické Bézierově křivce */
@@ -96,7 +96,7 @@ function FirBranch() {
       <path d="M110 62v54M230 92v34" stroke="#ffd166" strokeWidth="1.2" />
       <g transform="translate(110 132)">
         <rect x="-5" y="-20" width="10" height="7" rx="2" fill="#ffd166" />
-        <circle r="17" fill="#ea1d63" />
+        <circle r="17" fill="#e40b4d" />
         <path d="M-17 0a17 6 0 0 0 34 0" fill="none" stroke="#ffd166" strokeWidth="2" opacity=".9" />
         <circle cx="-6" cy="-6" r="5" fill="#fff" opacity=".45" />
       </g>
@@ -115,7 +115,7 @@ function Gifts() {
     <svg className="ha-gifts" viewBox="0 0 230 150" aria-hidden="true">
       <ellipse cx="118" cy="142" rx="110" ry="8" fill="#000" opacity=".25" />
       {/* velký růžový */}
-      <rect x="10" y="62" width="104" height="80" rx="6" fill="#ea1d63" />
+      <rect x="10" y="62" width="104" height="80" rx="6" fill="#e40b4d" />
       <rect x="10" y="62" width="104" height="80" rx="6" fill="url(#gShade)" />
       <rect x="4" y="50" width="116" height="20" rx="5" fill="#ff3d7f" />
       <rect x="54" y="50" width="16" height="92" fill="#ffd166" />
@@ -129,8 +129,8 @@ function Gifts() {
       {/* malý zlatý */}
       <rect x="182" y="112" width="42" height="30" rx="4" fill="#ffb020" />
       <rect x="179" y="106" width="48" height="10" rx="3" fill="#ffc94d" />
-      <rect x="198" y="106" width="9" height="36" fill="#ea1d63" />
-      <path d="M202 106c-5-9-15-10-15-4 0 4 8 5 15 4Zm0 0c5-9 15-10 15-4 0 4-8 5-15 4Z" fill="#ea1d63" />
+      <rect x="198" y="106" width="9" height="36" fill="#e40b4d" />
+      <path d="M202 106c-5-9-15-10-15-4 0 4 8 5 15 4Zm0 0c5-9 15-10 15-4 0 4-8 5-15 4Z" fill="#e40b4d" />
       <defs>
         <linearGradient id="gShade" x1="0" x2="1">
           <stop offset="0" stopColor="#fff" stopOpacity=".18" />

@@ -4,11 +4,11 @@
    azurová a zelený odznak „online“; zaoblené, přátelské tvary.
    ===================================================================== */
 :root {
-  --navy: #1b2a5a;
+  --navy: #1b2848;
   --navy-2: #142046;
   --navy-3: #243670;
-  --pink: #ea1d63;
-  --pink-deep: #c4114f;
+  --pink: #e40b4d;
+  --pink-deep: #b80a3e;
   --cyan: #2bb3e6;
   --green: #2ecc71;
   --amber: #ffb020;
@@ -18,11 +18,11 @@
   --ink-soft: #5a6483;
   --line: #e3e7f2;
   --radius: 18px;
-  --shadow: 0 18px 40px -22px rgba(27, 42, 90, .55);
+  --shadow: 0 18px 40px -22px rgba(27, 40, 72, .55);
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; font-family: 'Montserrat Variable', 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { margin: 0; font-family: 'Open Sans Variable', 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; font-size: 16px; -webkit-font-smoothing: antialiased; }
 h1, h2, h3 { font-weight: 800; line-height: 1.12; margin: 0; letter-spacing: -.01em; }
 p { margin: 0; }
 a { color: inherit; }
@@ -40,7 +40,7 @@ button { cursor: pointer; }
 /* ---------- tlačítka ---------- */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 24px; border-radius: 999px; border: 2px solid transparent; font-weight: 700; text-decoration: none; transition: transform .15s, box-shadow .15s, background .15s; }
 .btn:disabled { opacity: .6; cursor: progress; }
-.btn.primary, .btn.pink { background: var(--pink); color: #fff; box-shadow: 0 12px 24px -12px rgba(234, 29, 99, .9); }
+.btn.primary, .btn.pink { background: var(--pink); color: #fff; box-shadow: 0 12px 24px -12px rgba(228, 11, 77, .9); }
 .btn.primary:hover, .btn.pink:hover { transform: translateY(-2px); background: var(--pink-deep); }
 .btn.big { min-height: 56px; padding: 0 32px; font-size: 17px; }
 .btn.ghost { border-color: rgba(255,255,255,.5); color: #fff; background: transparent; }
@@ -51,10 +51,9 @@ button { cursor: pointer; }
 .btn.google:hover { border-color: var(--navy); }
 
 /* ---------- logo ---------- */
-.logo { font-weight: 800; font-size: 34px; letter-spacing: .02em; color: var(--navy); white-space: nowrap; }
+.logo { display: inline-block; height: 30px; color: var(--navy); line-height: 0; }
+.logo svg { height: 100%; width: auto; display: block; }
 .logo.light { color: #fff; }
-.logo-a { position: relative; }
-.logo-a i { position: absolute; width: 9px; height: 9px; background: var(--pink); border-radius: 50%; left: 50%; top: -8px; transform: translateX(-50%); }
 
 /* ---------- hlavička (jako na mobilmajak.cz) ---------- */
 .preview-bar { background: var(--amber); color: #3a2a00; font-size: 13px; font-weight: 600; padding: 8px 16px; text-align: center; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -83,7 +82,7 @@ button { cursor: pointer; }
 .hide-sm { }
 
 /* ---------- hero ---------- */
-.hero { position: relative; overflow: hidden; padding-bottom: 96px !important; background: radial-gradient(900px 500px at 85% 20%, #2f4aa0 0%, transparent 60%), var(--navy); color: #fff; padding: 84px 0 40px; }
+.hero { position: relative; overflow: hidden; padding-bottom: 96px !important; background: radial-gradient(900px 500px at 85% 20%, #2d4378 0%, transparent 60%), var(--navy); color: #fff; padding: 84px 0 40px; }
 .snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .hero-grid { position: relative; display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center; }
 .hero h1 { font-size: clamp(40px, 6vw, 72px); margin: 16px 0 20px; }
@@ -96,7 +95,7 @@ button { cursor: pointer; }
 .t-contest { --c: var(--amber); }
 .t-finale { --c: var(--green); }
 .hero-art { position: relative; min-height: 460px; display: grid; place-items: center; isolation: isolate; }
-.ha-glow { position: absolute; inset: 8% 10%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 209, 102, .38), rgba(234, 29, 99, .16) 55%, transparent); filter: blur(10px); z-index: -1; animation: haGlow 6s ease-in-out infinite; }
+.ha-glow { position: absolute; inset: 8% 10%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 209, 102, .38), rgba(228, 11, 77, .16) 55%, transparent); filter: blur(10px); z-index: -1; animation: haGlow 6s ease-in-out infinite; }
 @keyframes haGlow { 50% { opacity: .7; transform: scale(.94); } }
 .ha-fir { position: absolute; top: -2%; right: -16%; width: 60%; z-index: -1; opacity: .95; transform: scaleX(-1) rotate(-10deg); }
 .ha-phone { position: relative; width: 250px; transform: rotate(-6deg); }
@@ -280,7 +279,7 @@ input:focus, textarea:focus { border-color: var(--cyan); outline: 0; }
 .login { width: min(470px, 100% - 24px); margin: auto; }
 .login-card { position: relative; background: #fff; border-radius: 26px; padding: 34px 32px 28px; box-shadow: 0 40px 100px -30px rgba(0,0,0,.7); text-align: center; border-top: 8px solid var(--pink); }
 .login-logo { margin-bottom: 16px; }
-.login-logo .logo { font-size: 28px; }
+.login-logo .logo { height: 24px; }
 .login h2 { font-size: 24px; margin: 8px 0 10px; }
 .login-lead { color: var(--ink-soft); margin-bottom: 20px; font-size: 15px; }
 .or { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--ink-soft); font-size: 14px; }
@@ -339,7 +338,7 @@ input:focus, textarea:focus { border-color: var(--cyan); outline: 0; }
   .utility nav { gap: 14px; font-size: 13px; }
   .call { display: none; }
   .topbar .wrap { min-height: 72px; }
-  .logo { font-size: 26px; }
+  .logo { height: 22px; }
   .phone { border-radius: 30px; padding: 14px 12px 22px; box-shadow: 0 30px 50px -30px rgba(27,42,90,.8), 0 0 0 5px #0b1228; }
   .grid { gap: 16px 8px; }
   .tile { border-radius: 20px; }
@@ -412,10 +411,16 @@ input:focus, textarea:focus { border-color: var(--cyan); outline: 0; }
 
 /* ---------------------------------------------------------------- admin (/?admin) */
 .admin { min-height: 100vh; display: grid; place-items: center; padding-block: 40px; }
-.admin-card { width: min(640px, 100%); background: #fff; border-radius: 20px; padding: 28px; box-shadow: 0 20px 50px -30px rgba(27, 42, 90, .5); display: grid; gap: 14px; justify-items: start; }
+.admin-card { width: min(640px, 100%); background: #fff; border-radius: 20px; padding: 28px; box-shadow: 0 20px 50px -30px rgba(27, 40, 72, .5); display: grid; gap: 14px; justify-items: start; }
 .admin-card h1 { font-size: 26px; margin: 0; color: var(--navy); }
 .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; }
 .admin-stats div { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; }
 .admin-stats strong { font-size: 28px; color: var(--pink); }
 .admin-stats span { font-size: 13px; color: var(--ink-soft); }
 .admin-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* motiv majáku Á (manuál) */
+.beacon-a { fill: currentColor; pointer-events: none; }
+.footer { position: relative; overflow: hidden; }
+.footer > .wrap { position: relative; z-index: 1; }
+.footer-beacon { position: absolute; right: 4%; bottom: -30%; height: 150%; color: rgba(0, 0, 0, .25); }

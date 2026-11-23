@@ -1,11 +1,27 @@
 import { useEffect, useRef } from 'react';
+import { LOGO_DOME, LOGO_LETTERS, LOGO_TRANSFORM, LOGO_VIEWBOX } from '../logoPaths';
 
-/** Logo MOBIL MAJÁK (textové, dokud není k dispozici soubor loga). */
+/** Oficiální logotyp MOBIL MAJÁK (vektor podle manuálu). light = inverzní varianta na tmavé pozadí. */
 export function Logo({ light = false }: { light?: boolean }) {
   return (
-    <span className={'logo' + (light ? ' light' : '')} aria-label="Mobil Maják">
-      MOBIL MAJ<span className="logo-a">Á<i /></span>K
+    <span className={'logo' + (light ? ' light' : '')} role="img" aria-label="Mobil Maják">
+      <svg viewBox={LOGO_VIEWBOX} aria-hidden="true">
+        <g transform={LOGO_TRANSFORM}>
+          <path fill="currentColor" d={LOGO_LETTERS} />
+          <path fill="#E40B4D" d={LOGO_DOME} />
+        </g>
+      </svg>
     </span>
+  );
+}
+
+/** Motiv majáku z manuálu: písmeno Á s kopulí jako velká tmavá silueta v pozadí. */
+export function BeaconA({ className = '' }: { className?: string }) {
+  return (
+    <svg className={'beacon-a ' + className} viewBox="0 0 200 400" aria-hidden="true">
+      <path d="M50 70V40a50 50 0 0 1 100 0v50a14 14 0 0 1-14 14H50Z" />
+      <path fillRule="evenodd" d="M58 124h84a14 14 0 0 1 13 9l45 267H0l45-267a14 14 0 0 1 13-9Zm42 44-42 232h84Z" />
+    </svg>
   );
 }
 
@@ -49,7 +65,7 @@ export function Snow({ count = 55 }: { count?: number }) {
 /** Konfety při otevření okénka nebo splnění hry. */
 export function Celebrate({ burst }: { burst: number }) {
   if (!burst) return null;
-  const colors = ['#e91e63', '#29b6f6', '#ffffff', '#ffb020', '#2ecc71'];
+  const colors = ['#e40b4d', '#29b6f6', '#ffffff', '#ffb020', '#2ecc71'];
   return (
     <div className="celebrate" key={burst} aria-hidden="true">
       {Array.from({ length: 34 }, (_, i) => (
@@ -67,7 +83,7 @@ export function Celebrate({ burst }: { burst: number }) {
 
 /** Světelný řetěz: žárovky na prověšeném drátku, které se střídavě rozsvěcují. */
 export function Lights({ count = 16, className = '' }: { count?: number; className?: string }) {
-  const colors = ['#ea1d63', '#ffd166', '#2bb3e6', '#3ddc84'];
+  const colors = ['#e40b4d', '#ffd166', '#2bb3e6', '#3ddc84'];
   return (
     <div className={'lights ' + className} aria-hidden="true" style={{ ['--n' as string]: count }}>
       {Array.from({ length: count }, (_, i) => (
