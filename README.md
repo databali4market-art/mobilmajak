@@ -24,12 +24,14 @@ npm run build    # výstup v dist/
 
 ## Jak to celé funguje
 
-- **Web** běží na Firebase Hosting (doména `advent.mobilmajak.cz`), nasazuje se automaticky po každém pushi do `main`.
+- **Ostrý web** běží na Cloudflare Pages (`advent.mobilmajak.cz`, neomezený přenos zdarma). Nasazuje se jen z větve `produkce`.
+- **Testovací web** běží na Firebase Hosting (`https://mobil-majak.web.app`), nasazuje se po každém pushi do `main` (spolu s `firestore.rules`).
+  Firebase Hosting na bezplatném tarifu má limit 360 MB přenosu denně (≈ 700 nových návštěvníků), proto na něm neběží ostrý provoz.
 - **Přihlášení** jen přes Google (Firebase Authentication). Bez přihlášení se okénka neotevřou (pokud `DEMO_MODE = false`).
 - **Data** ve Firestore: `users/{uid}` (e-mail, jméno, otevřená okénka, souhlas s newsletterem vč. data a znění), `entries` (soutěžní odpovědi).
 - **E-maily** stahuje správce na `https://advent.mobilmajak.cz/?admin` jako CSV (newsletter / všichni přihlášení / soutěžní odpovědi).
 
-Stačí bezplatný tarif Firebase (Spark). Kalendář má mít vlastní Firebase projekt, oddělený od jiných aplikací.
+Stačí bezplatný tarif Firebase (Spark) – přihlášení a databáze mají vlastní, dostatečné limity. Kalendář má mít vlastní Firebase projekt, oddělený od jiných aplikací.
 
 ## Nastavení Firebase (jednorázově, cca 15 minut)
 
@@ -50,6 +52,20 @@ Workflow `.github/workflows/deploy.yml` po každém pushi do `main` sestaví web
 2. Aby se nasazovala i pravidla databáze, potřebuje tento účet (`firebase-adminsdk-…@mobil-majak.iam.gserviceaccount.com`) navíc roli **Service Usage Consumer**: [Google Cloud → IAM](https://console.cloud.google.com/iam-admin/iam?project=mobil-majak) → u účtu tužka → *Add another role* → Service Usage Consumer → Save. Bez ní se nasadí jen web.
 
 Ruční nasazení z počítače: `npm run build && npx firebase-tools deploy --only hosting,firestore:rules --project mobil-majak`.
+
+## Ostrý web na Cloudflare Pages
+
+Postup práce: změny → `main` → vyzkoušet na `mobil-majak.web.app` → až je vše hotové, sloučit `main` do `produkce` → Cloudflare nasadí ostrý web. Každé nasazení ostrého webu = jedno sestavení na Cloudflare (limit 500 / měsíc / účet).
+
+Jednorázové nastavení:
+1. Cloudflare → Workers & Pages → Create → Pages → *Connect to Git* → repo `mobilmajak`.
+2. Production branch **`produkce`**, framework *None*, build command `npm run build`, output directory `dist`, proměnná `NODE_VERSION=22`.
+3. Settings → Builds → *Preview deployments* → **None** (testuje se na Firebase, šetří sestavení).
+4. Custom domains → `advent.mobilmajak.cz` (u správce DNS CNAME `advent` → `<projekt>.pages.dev`).
+5. Firebase → Authentication → Settings → Authorized domains → přidat `advent.mobilmajak.cz`.
+6. Google Cloud → APIs & Services → Credentials → OAuth klient „Web client (auto created by Google Service)“ → *Authorized redirect URIs* → přidat `https://advent.mobilmajak.cz/__/auth/handler`.
+
+Přihlašovací stránka Firebase se na ostré doméně podává přes `functions/__/[[path]].js` (proxy na `mobil-majak.firebaseapp.com`), takže přihlášení přes Google funguje i v Safari / na iPhonu. `authDomain` se v `src/config.ts` přepíná podle domény automaticky.
 
 ## Newsletter a e-maily
 

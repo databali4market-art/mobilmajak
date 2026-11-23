@@ -4,12 +4,12 @@
  * 1) Firebase – zkopírujte z Firebase Console → Project settings → Your apps → Web app.
  *    Tyto hodnoty nejsou tajné. Dokud je apiKey prázdný, web běží v UKÁZKOVÉM režimu
  *    (přihlášení jen e-mailem bez ověření, data jen v prohlížeči).
- *    authDomain: po připojení vlastní domény na Firebase Hosting přepište na 'advent.mobilmajak.cz'
- *    (přihlášení přes Google pak spolehlivě funguje i v Safari / na iPhonu).
  */
 export const FIREBASE = {
   apiKey: 'AIzaSyDQjGSOrxLNatm-xj059HOyp86qf5lTrko',
-  authDomain: 'mobil-majak.firebaseapp.com',
+  // Na ostré doméně běží přihlašovací stránka přes proxy na stejné doméně (functions/__/[[path]].js),
+  // jinde (test na mobil-majak.web.app, localhost) přímo na Firebase.
+  authDomain: typeof location !== 'undefined' && location.hostname === 'advent.mobilmajak.cz' ? 'advent.mobilmajak.cz' : 'mobil-majak.firebaseapp.com',
   projectId: 'mobil-majak',
   storageBucket: 'mobil-majak.firebasestorage.app',
   messagingSenderId: '1098150973300',
