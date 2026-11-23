@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight, Eye, Gift, Snowflake, LogIn, Phone, Share2, Sparkles, Store, Wrench, Smartphone } from 'lucide-react';
-import { availableDay, BASE, CONTEST_DAYS, doors as ALL_DOORS, PHONE, SHOP } from './content';
+import { availableDay, BASE, CONTEST_DAYS, doors as ALL_DOORS, PHONE, PRIVACY_URL, SHOP } from './content';
 import { CONTENT_MODE, DEMO_MODE, PREVIEW_KEY } from './config';
 import { backend } from './backend';
 import type { Door, Progress, User } from './types';
@@ -262,7 +262,7 @@ export default function App() {
           </div>
           <div id="soukromi" className="privacy">
             <h3>Soukromí</h3>
-            <p>Pro přihlášení používáme službu Firebase (Google). Ukládáme váš e-mail, případně jméno z účtu Google, která okénka jste otevřeli, soutěžní odpovědi a to, zda chcete dostávat novinky. Údaje slouží jen k provozu adventního kalendáře, vyhodnocení soutěží a, pokud jste o to požádali, k zasílání novinek. Podrobnosti najdete v zásadách ochrany osobních údajů na <a href={SHOP} target="_blank" rel="noreferrer">mobilmajak.cz</a>. {draft && <i>[Doplnit přesný odkaz a správce údajů.]</i>}</p>
+            <p>Kalendář provozuje Mobil Maják. Pro přihlášení a ukládání dat používáme službu Firebase (Google). Ukládáme váš e-mail a jméno z účtu Google, která okénka jste otevřeli, soutěžní odpovědi a to, zda chcete dostávat novinky. Údaje slouží jen k provozu adventního kalendáře a vyhodnocení soutěží; e-mailem s novinkami vás oslovíme jen tehdy, pokud jste k tomu dali souhlas (odvolat ho můžete kdykoli v sekci Moje kupóny). Údaje z kalendáře uchováváme do 31. 3. 2027, kontakty se souhlasem do jeho odvolání. Web nepoužívá analytické ani reklamní cookies. Více v <a href={PRIVACY_URL} target="_blank" rel="noreferrer">zásadách ochrany osobních údajů</a>.</p>
           </div>
           <small>© 2026 Mobil Maják · Okénka se odemykají o půlnoci (Europe/Prague)</small>
         </div>

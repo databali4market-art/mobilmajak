@@ -11,6 +11,7 @@ export const YEAR = 2026;
 
 export const BASE = import.meta.env.BASE_URL;
 export const SHOP = 'https://www.mobilmajak.cz/';
+export const PRIVACY_URL = 'https://www.mobilmajak.cz/Stranky/Ochrana-osobnich-udaju';
 export const PHONE = '601 009 001';
 
 export const CONTEST_DAYS = [5, 13, 19];
