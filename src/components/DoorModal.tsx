@@ -1,3 +1,4 @@
+import { RULES_URL } from '../content';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Copy, Share2, X } from 'lucide-react';
 import type { Door } from '../types';
@@ -89,7 +90,7 @@ export function DoorModal({ door, draft, entered, canPrev, canNext, onPrev, onNe
             {c && (
               <div className="contest">
                 <div className="prize"><span>Výhra</span><b>{c.prize}</b></div>
-                <p className="rules">{c.rules}</p>
+                <p className="rules">{c.rules} <a href={RULES_URL} target="_blank" rel="noreferrer">Úplná pravidla</a></p>
                 {entered ? (
                   <div className="success" role="status"><Check size={26} /><div><strong>Jste v soutěži.</strong><span>Výherce oznámíme e-mailem. Držíme palce!</span></div></div>
                 ) : (
@@ -97,7 +98,7 @@ export function DoorModal({ door, draft, entered, canPrev, canNext, onPrev, onNe
                     {c.kind === 'number' && (<><label htmlFor="answer">Váš tip</label><input id="answer" name="answer" type="number" inputMode="numeric" min={0} max={1000000} required placeholder={c.placeholder} /></>)}
                     {(c.kind === 'text' || c.kind === 'photo') && (<><label htmlFor="answer">{c.kind === 'photo' ? 'Popis k fotce' : 'Vaše odpověď'}</label><textarea id="answer" name="answer" required minLength={3} maxLength={1000} rows={3} placeholder={c.placeholder || 'Napište nám…'} /></>)}
                     {c.kind === 'photo' && <p className="rules">Fotku pošlete na: <b>{c.sendTo}</b>. Přihlásit se můžete i tady, abychom ji spárovali.</p>}
-                    <label className="check"><input type="checkbox" required /> <span>Souhlasím s pravidly soutěže a se zpracováním údajů pro její účely.</span></label>
+                    <label className="check"><input type="checkbox" required /> <span>Souhlasím s <a href={RULES_URL} target="_blank" rel="noreferrer">pravidly soutěže</a> a se zpracováním údajů pro její účely.</span></label>
                     {formError && <div className="form-error" role="alert">{formError}</div>}
                     <button className="btn primary" disabled={busy}>{busy ? 'Odesílám…' : c.kind === 'email' ? 'Zapojit se do soutěže' : 'Odeslat'} <ArrowRight size={17} /></button>
                   </form>

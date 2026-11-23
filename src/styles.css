@@ -424,3 +424,15 @@ input:focus, textarea:focus { border-color: var(--cyan); outline: 0; }
 .footer { position: relative; overflow: hidden; }
 .footer > .wrap { position: relative; z-index: 1; }
 .footer-beacon { position: absolute; right: 4%; bottom: -30%; height: 150%; color: rgba(0, 0, 0, .25); }
+
+/* pravidla soutěží (/?pravidla) */
+.rules-page { padding-block: 40px; }
+.rules-card { max-width: 760px; margin: 0 auto; background: #fff; border-radius: 20px; padding: 32px; box-shadow: var(--shadow); }
+.rules-card h1 { font-size: 28px; color: var(--navy); margin: 18px 0 8px; line-height: 1.25; }
+.rules-card h2 { font-size: 17px; color: var(--navy); margin: 24px 0 6px; }
+.rules-card h2::before { content: ''; display: inline-block; width: 18px; height: 3px; background: var(--pink); vertical-align: middle; margin-right: 8px; border-radius: 2px; }
+.rules-card p, .rules-card li { color: var(--ink); font-size: 15px; }
+.rules-card ul { padding-left: 20px; }
+.rules-logo { display: inline-block; }
+.rules-card .btn { margin-top: 18px; }
+@media (max-width: 560px) { .rules-card { padding: 22px 16px; } .rules-card h1 { font-size: 22px; } }

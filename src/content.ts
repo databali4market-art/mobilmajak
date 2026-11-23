@@ -11,6 +11,16 @@ export const YEAR = 2026;
 
 export const BASE = import.meta.env.BASE_URL;
 export const SHOP = 'https://www.mobilmajak.cz/';
+/** Provozovatel kalendáře a pořadatel soutěží */
+export const OPERATOR = {
+  name: 'Codaruina s.r.o.',
+  address: 'Litovelská 118/12, 779 00 Olomouc',
+  ico: '04147537',
+  dic: 'CZ04147537',
+  email: 'obchod@mobilmajak.cz',
+  phone: '+420 601 009 001',
+};
+export const RULES_URL = '?pravidla';
 export const PRIVACY_URL = 'https://www.mobilmajak.cz/Stranky/Ochrana-osobnich-udaju';
 export const PHONE = '601 009 001';
 
@@ -64,7 +74,7 @@ export const doors: Door[] = [
     contest: {
       kind: 'email',
       prize: 'Bezdrátová sluchátka Marshall Major V (černá)',
-      rules: 'Do soutěže se zapojíte registrací e-mailem. Výherce vylosujeme 24. 12. a oznámíme mu to e-mailem.',
+      rules: 'Zapojit se lze do 23. 12. Výherce vylosujeme 24. 12. a oznámíme mu to e-mailem.',
     },
     url: SHOP + 'Nahlavni-bezdratova-sluchatka-Marshall-Major-V-cerna', urlLabel: 'Sluchátka v e-shopu',
     confirm: 'Doplnit pravidla soutěže (zveřejnění, ověření výherce).',
@@ -132,7 +142,7 @@ export const doors: Door[] = [
     contest: {
       kind: 'number', placeholder: 'Váš tip (celé číslo)',
       prize: 'Poukaz na servis v hodnotě 1 000 Kč',
-      rules: 'Vyhrává tip nejblíže skutečnému počtu oprav za rok 2026. Výherce oznámíme e-mailem.',
+      rules: 'Tipy lze posílat do 23. 12. Vyhrává tip nejblíže skutečnému počtu oprav za rok 2026, vyhodnotíme do 15. 1. 2027 a výherci napíšeme e-mailem.',
     },
     confirm: 'Správný počet oprav máme z tabulky, do webu ho nedáváme. Vyhodnotíte ho ručně z odpovědí.',
   },
@@ -185,7 +195,7 @@ export const doors: Door[] = [
     contest: {
       kind: 'photo', placeholder: 'Pár slov: jak se to stalo a o jaký telefon jde',
       prize: 'Oprava zdarma do 3 000 Kč',
-      rules: 'Vybereme nejhůř rozbitý displej. Odesláním souhlasíte s tím, že můžeme fotku zveřejnit na sociálních sítích.',
+      rules: 'Zapojit se lze do 23. 12. Nejhůř rozbitý displej vybereme 24. 12. Odesláním souhlasíte se zveřejněním fotky na našem webu a sociálních sítích.',
       sendTo: '[doplnit e-mail nebo Instagram]',
     },
     confirm: 'Doplnit, kam se pošle fotka. Limit 3 000 Kč zvládnete, většina telefonů se do něj vejde.',
