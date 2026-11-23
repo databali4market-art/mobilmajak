@@ -52,4 +52,6 @@ export interface Progress {
   /** dny, ve kterých uživatel odeslal soutěžní odpověď */
   entries: number[];
   newsletter: boolean;
+  /** uživatel už odpověděl na nabídku newsletteru (ano i ne) – znovu se neptáme */
+  newsletterAsked?: boolean;
 }

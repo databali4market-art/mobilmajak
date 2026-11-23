@@ -22,6 +22,8 @@ export interface Backend {
   markOpened(u: User, day: number, preview: boolean): Promise<void>;
   submitEntry(u: User, day: number, answer: string, preview: boolean): Promise<void>;
   setNewsletter(u: User, v: boolean): Promise<void>;
+  /** odpověď na jednorázovou nabídku newsletteru po otevření okénka */
+  answerNewsletterOffer(u: User, v: boolean): Promise<void>;
   /** jen pro správce (ADMIN_EMAILS + firestore.rules): všechny kontakty a soutěžní odpovědi */
   exportData(): Promise<ExportData>;
 }
@@ -58,6 +60,7 @@ function localBackend(): Backend {
       p.entries.push(day); setP(u, preview, p);
     },
     async setNewsletter(u, v) { const p = getP(u, false); p.newsletter = v; setP(u, false, p); },
+    async answerNewsletterOffer(u, v) { const p = getP(u, false); p.newsletter = p.newsletter || v; p.newsletterAsked = true; setP(u, false, p); },
     async exportData() { throw new Error('Export funguje až s nastaveným Firebase.'); },
   };
 }
@@ -90,7 +93,7 @@ function firebaseBackend(): Backend {
     const ref = fs.doc(db, 'users', u.uid);
     const snap = await fs.getDoc(ref);
     const now = fs.serverTimestamp();
-    const consent = newsletter ? await consentFields(true) : {};
+    const consent = newsletter ? { ...(await consentFields(true)), newsletterAsked: true } : {};
     if (!snap.exists()) await fs.setDoc(ref, { email: u.email, name: u.name, newsletter: false, createdAt: now, lastSeenAt: now, opened: {}, entries: [], ...consent });
     else await fs.updateDoc(ref, { email: u.email, name: u.name, lastSeenAt: now, ...consent });
   }
@@ -132,7 +135,7 @@ function firebaseBackend(): Backend {
       const raw = (d[userField(preview)] || {}) as Record<string, { toDate?: () => Date } | string>;
       const opened: Record<number, string> = {};
       for (const [k, v] of Object.entries(raw)) opened[Number(k)] = typeof v === 'string' ? v : v?.toDate?.().toISOString() || '';
-      return { opened, entries: (d[entriesField(preview)] || []) as number[], newsletter: !!d.newsletter };
+      return { opened, entries: (d[entriesField(preview)] || []) as number[], newsletter: !!d.newsletter, newsletterAsked: !!d.newsletterAsked };
     },
     async markOpened(u, day, preview) {
       const { db, fs } = await sdk;
@@ -152,7 +155,11 @@ function firebaseBackend(): Backend {
     },
     async setNewsletter(u, v) {
       const { db, fs } = await sdk;
-      await fs.setDoc(fs.doc(db, 'users', u.uid), await consentFields(v), { merge: true });
+      await fs.setDoc(fs.doc(db, 'users', u.uid), { ...(await consentFields(v)), newsletterAsked: true }, { merge: true });
+    },
+    async answerNewsletterOffer(u, v) {
+      const { db, fs } = await sdk;
+      await fs.setDoc(fs.doc(db, 'users', u.uid), { ...(v ? await consentFields(true) : {}), newsletterAsked: true }, { merge: true });
     },
     async exportData() {
       const { db, fs } = await sdk;

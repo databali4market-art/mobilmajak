@@ -282,6 +282,13 @@ export default function App() {
         onShare={share}
         onCopy={copy}
         onWin={() => setBurst((b) => b + 1)}
+        offerNewsletter={!!user && !progress.newsletter && !progress.newsletterAsked}
+        onNewsletterOffer={(v) => {
+          if (!user) return;
+          setProgress((p) => ({ ...p, newsletter: p.newsletter || v, newsletterAsked: true }));
+          notify(v ? 'Děkujeme! Novinky vám budeme posílat e-mailem.' : 'Dobře, nebudeme otravovat.');
+          backend.answerNewsletterOffer(user, v).catch(() => notify('Nastavení se nepodařilo uložit.'));
+        }}
         onEnter={async (day, answer) => {
           if (!user && !DEMO_MODE) throw new Error('Nejste přihlášeni.');
           if (!CONTEST_DAYS.includes(day)) throw new Error('Soutěž v tomto okénku neprobíhá.');
@@ -296,7 +303,7 @@ export default function App() {
       <GiftsDrawer
         open={drawer} user={user} newsletter={progress.newsletter} doors={openedDoors}
         onClose={() => setDrawer(false)} onPick={(d) => { setDrawer(false); void openDoor(d); }} onCopy={copy} onLogout={logout}
-        onNewsletter={(v) => { if (!user) return; setProgress((p) => ({ ...p, newsletter: v })); backend.setNewsletter(user, v).catch(() => notify('Nastavení se nepodařilo uložit.')); }}
+        onNewsletter={(v) => { if (!user) return; setProgress((p) => ({ ...p, newsletter: v, newsletterAsked: true })); backend.setNewsletter(user, v).catch(() => notify('Nastavení se nepodařilo uložit.')); }}
       />
       <Celebrate burst={burst} />
       {toast && <div className="toast" role="status">{toast}</div>}

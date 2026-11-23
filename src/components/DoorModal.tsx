@@ -1,4 +1,5 @@
 import { RULES_URL } from '../content';
+import { NEWSLETTER_CONSENT } from '../config';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Copy, Share2, X } from 'lucide-react';
 import type { Door } from '../types';
@@ -19,9 +20,12 @@ interface Props {
   onCopy: (code: string) => void;
   onEnter: (day: number, answer: string) => Promise<void>;
   onWin: () => void;
+  /** ukázat jednorázovou nabídku newsletteru */
+  offerNewsletter: boolean;
+  onNewsletterOffer: (v: boolean) => void;
 }
 
-export function DoorModal({ door, draft, entered, canPrev, canNext, onPrev, onNext, onClose, onShare, onCopy, onEnter, onWin }: Props) {
+export function DoorModal({ door, draft, entered, canPrev, canNext, onPrev, onNext, onClose, onShare, onCopy, onEnter, onWin, offerNewsletter, onNewsletterOffer }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState('');
@@ -108,6 +112,21 @@ export function DoorModal({ door, draft, entered, canPrev, canNext, onPrev, onNe
 
             {door.url && (
               <div className="cta-row"><a className="btn primary" href={door.url} target="_blank" rel="noreferrer">{door.urlLabel || 'Do e-shopu'} <ArrowUpRight size={16} /></a></div>
+            )}
+
+            {offerNewsletter && (
+              <div className="nl-offer" role="region" aria-label="Novinky e-mailem">
+                <div className="nl-offer-icon" aria-hidden="true">✉</div>
+                <div>
+                  <strong>Chcete vědět o dalších slevách dřív než ostatní?</strong>
+                  <p>{NEWSLETTER_CONSENT.text}</p>
+                  <div className="nl-offer-actions">
+                    <button className="btn primary" onClick={() => onNewsletterOffer(true)}>Ano, chci novinky</button>
+                    <button className="btn ghost-dark" onClick={() => onNewsletterOffer(false)}>Teď ne</button>
+                  </div>
+                  <small>Kupóny z kalendáře dostanete tak jako tak. Nastavení změníte kdykoli v Moje kupóny.</small>
+                </div>
+              </div>
             )}
 
             {draft && door.confirm && <div className="draft-note"><b>K potvrzení:</b> {door.confirm}</div>}

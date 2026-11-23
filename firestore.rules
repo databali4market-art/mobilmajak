@@ -18,7 +18,7 @@ service cloud.firestore {
       allow read: if isAdmin() || (request.auth != null && request.auth.uid == uid);
       allow create, update: if request.auth != null && request.auth.uid == uid
         && request.resource.data.keys().hasOnly(['email', 'name', 'newsletter', 'newsletterAt', 'newsletterConsent',
-             'newsletterRevokedAt', 'createdAt', 'lastSeenAt', 'opened', 'openedPreview', 'entries', 'entriesPreview'])
+             'newsletterRevokedAt', 'newsletterAsked', 'createdAt', 'lastSeenAt', 'opened', 'openedPreview', 'entries', 'entriesPreview'])
         && request.resource.data.email == request.auth.token.email.lower()
         && (!('newsletter' in request.resource.data) || request.resource.data.newsletter is bool);
       allow delete: if false;

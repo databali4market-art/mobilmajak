@@ -436,3 +436,12 @@ input:focus, textarea:focus { border-color: var(--cyan); outline: 0; }
 .rules-logo { display: inline-block; }
 .rules-card .btn { margin-top: 18px; }
 @media (max-width: 560px) { .rules-card { padding: 22px 16px; } .rules-card h1 { font-size: 22px; } }
+
+/* jednorázová nabídka newsletteru v okénku */
+.nl-offer { display: flex; gap: 14px; margin: 18px 0 4px; padding: 16px 18px; border-radius: 16px; background: linear-gradient(135deg, #fff0f4, #fff 70%); border: 1px solid #f9c6d6; animation: pop .35s; }
+.nl-offer-icon { flex: none; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--pink); color: #fff; font-size: 20px; }
+.nl-offer strong { color: var(--navy); font-size: 16px; }
+.nl-offer p { margin: 4px 0 10px; font-size: 14px; color: var(--ink-soft); }
+.nl-offer-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.nl-offer-actions .btn { min-height: 40px; padding: 0 18px; font-size: 14px; }
+.nl-offer small { color: var(--ink-soft); font-size: 12px; }
