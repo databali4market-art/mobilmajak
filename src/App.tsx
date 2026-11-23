@@ -9,6 +9,7 @@ import { DoorModal } from './components/DoorModal';
 import { LoginDialog } from './components/LoginDialog';
 import { GiftsDrawer } from './components/GiftsDrawer';
 import { Celebrate, Drift, Lights, Logo, Snow } from './components/Decor';
+import { HeroArt } from './components/HeroArt';
 
 const EVE = Date.parse('2026-12-24T00:00:00+01:00');
 const draft = CONTENT_MODE !== 'live';
@@ -190,12 +191,7 @@ export default function App() {
               {!user && !DEMO_MODE && <button className="btn ghost" onClick={() => setLogin({ open: true })}><LogIn size={17} /> Přihlásit se</button>}
             </div>
           </div>
-          <div className="hero-art" aria-hidden="true">
-            <div className="phone-mock"><span className="pm-notch" /><div className="pm-grid">{Array.from({ length: 12 }, (_, i) => <i key={i} className={'t-' + ['offer', 'game', 'tip', 'contest'][i % 4]}>{i + 1}</i>)}</div></div>
-            <div className="float-pill p1">Čištění zdarma</div>
-            <div className="float-pill p2">Soutěž o sluchátka</div>
-            <div className="float-pill p3">2 fólie za cenu 1</div>
-          </div>
+          <HeroArt />
         </div>
         <div className="wrap countdown" aria-label="Odpočet do Štědrého dne">
           <div className="cd-label">Do Štědrého dne zbývá</div>
