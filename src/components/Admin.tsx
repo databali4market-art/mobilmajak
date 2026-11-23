@@ -67,8 +67,8 @@ export function Admin() {
   }
   function dlAll() {
     download(`vsichni-prihlaseni-${stamp()}.csv`, toCsv(
-      ['email', 'jmeno', 'newsletter', 'souhlas_od', 'registrace', 'naposledy', 'otevrenych_okenek'],
-      data!.contacts.map((c) => [c.email, c.name, c.newsletter, fmt(c.newsletterAt), fmt(c.createdAt), fmt(c.lastSeenAt), c.opened]),
+      ['email', 'jmeno', 'newsletter', 'stav_souhlasu', 'souhlas_od', 'odvolano', 'registrace', 'naposledy', 'otevrenych_okenek'],
+      data!.contacts.map((c) => [c.email, c.name, c.newsletter, c.consentStatus, fmt(c.newsletterAt), fmt(c.revokedAt), fmt(c.createdAt), fmt(c.lastSeenAt), c.opened]),
     ));
   }
   function dlEntries() {
@@ -102,7 +102,8 @@ export function Admin() {
               {data && (
                 <div className="admin-stats">
                   <div><strong>{data.contacts.length}</strong><span>přihlášených</span></div>
-                  <div><strong>{subscribers.length}</strong><span>se souhlasem s newsletterem</span></div>
+                  <div><strong>{subscribers.length}</strong><span>se souhlasem s newsletterem{data.contacts.length ? ` (${Math.round((subscribers.length / data.contacts.length) * 100)} %)` : ''}</span></div>
+                  <div><strong>{data.contacts.filter((c) => c.consentStatus === 'odmítl' || c.consentStatus === 'odvolal').length}</strong><span>odmítlo nebo odvolalo</span></div>
                   <div><strong>{data.entries.length}</strong><span>soutěžních odpovědí</span></div>
                 </div>
               )}

@@ -28,7 +28,7 @@ export interface Backend {
   exportData(): Promise<ExportData>;
 }
 
-export interface ContactRow { email: string; name: string; newsletter: boolean; newsletterAt: string; newsletterConsent: string; createdAt: string; lastSeenAt: string; opened: number }
+export interface ContactRow { email: string; name: string; newsletter: boolean; consentStatus: string; newsletterAt: string; newsletterConsent: string; revokedAt: string; createdAt: string; lastSeenAt: string; opened: number }
 export interface EntryRow { day: number; email: string; name: string; answer: string; createdAt: string }
 export interface ExportData { contacts: ContactRow[]; entries: EntryRow[] }
 
@@ -172,7 +172,8 @@ function firebaseBackend(): Backend {
       }
       const contacts: ContactRow[] = users.docs.map((d) => {
         const x = d.data();
-        return { email: x.email || '', name: x.name || '', newsletter: !!x.newsletter, newsletterAt: x.newsletter ? iso(x.newsletterAt) : '', newsletterConsent: x.newsletter ? x.newsletterConsent || '' : '', createdAt: iso(x.createdAt), lastSeenAt: iso(x.lastSeenAt), opened: Object.keys(x.opened || {}).length };
+        const consentStatus = x.newsletter ? 'souhlas' : x.newsletterRevokedAt ? 'odvolal' : x.newsletterAsked ? 'odmítl' : 'neodpověděl';
+        return { email: x.email || '', name: x.name || '', newsletter: !!x.newsletter, consentStatus, newsletterAt: x.newsletter ? iso(x.newsletterAt) : '', newsletterConsent: x.newsletter ? x.newsletterConsent || '' : '', revokedAt: !x.newsletter ? iso(x.newsletterRevokedAt) : '', createdAt: iso(x.createdAt), lastSeenAt: iso(x.lastSeenAt), opened: Object.keys(x.opened || {}).length };
       }).sort((p, q) => p.createdAt.localeCompare(q.createdAt));
       const rows: EntryRow[] = entries.docs.map((d) => d.data()).filter((x) => !x.preview)
         .map((x) => ({ day: x.day, email: x.email || '', name: x.name || '', answer: x.answer || '', createdAt: iso(x.createdAt) }))
