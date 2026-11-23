@@ -7,8 +7,8 @@
  */
 export const FIREBASE = {
   apiKey: 'AIzaSyDQjGSOrxLNatm-xj059HOyp86qf5lTrko',
-  // Na ostré doméně běží přihlašovací stránka přes proxy na stejné doméně (functions/__/[[path]].js),
-  // jinde (test na mobil-majak.web.app, localhost) přímo na Firebase.
+  // Na ostré doméně běží přihlašovací stránka Firebase (/__/auth) přímo na advent.mobilmajak.cz (Firebase Hosting),
+  // takže přihlášení funguje i v Safari / na iPhonu. Jinde (testovací web, localhost) přes firebaseapp.com.
   authDomain: typeof location !== 'undefined' && location.hostname === 'advent.mobilmajak.cz' ? 'advent.mobilmajak.cz' : 'mobil-majak.firebaseapp.com',
   projectId: 'mobil-majak',
   storageBucket: 'mobil-majak.firebasestorage.app',

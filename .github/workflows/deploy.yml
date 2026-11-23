@@ -1,17 +1,19 @@
-# Po každém pushi do main se web sestaví a nasadí na Firebase Hosting (včetně firestore.rules).
+# Nasazení na Firebase Hosting (projekt mobil-majak, tarif Spark).
+#   push do main      → TESTOVACÍ web (preview kanál „test“, adresa mobil-majak--test-….web.app, platí 30 dní)
+#   push do produkce  → OSTRÝ web (mobil-majak.web.app, advent.mobilmajak.cz)
+# firestore.rules se nasazují v obou případech (testovací i ostrý web sdílí jednu databázi).
 # Potřebuje v GitHubu (Settings → Secrets and variables → Actions):
+#   - secret FIREBASE_SERVICE_ACCOUNT = JSON klíč servisního účtu (viz README, sekce Nasazení)
 #   - (volitelně) proměnnou FIREBASE_PROJECT_ID, výchozí je mobil-majak
-#   - secret     FIREBASE_SERVICE_ACCOUNT  = JSON klíč servisního účtu (role „Firebase Admin“)
-# Postup je v README v sekci Nasazení.
 name: Nasazení na Firebase
 
 on:
   push:
-    branches: [main]
+    branches: [main, produkce]
   workflow_dispatch:
 
 concurrency:
-  group: deploy
+  group: deploy-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -19,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HAS_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
+      PROJECT: ${{ vars.FIREBASE_PROJECT_ID || 'mobil-majak' }}
     steps:
       - if: env.HAS_KEY != 'true'
         run: echo "::warning::Chybí secret FIREBASE_SERVICE_ACCOUNT – nasazení se přeskakuje (viz README)."
@@ -33,12 +36,12 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-      - name: Nasazení webu (Hosting)
+      - name: Testovací web (preview kanál „test“)
+        if: env.HAS_KEY == 'true' && github.ref_name == 'main'
+        run: npx --yes firebase-tools@15 hosting:channel:deploy test --expires 30d --project "$PROJECT" --non-interactive
+      - name: Ostrý web (live)
+        if: env.HAS_KEY == 'true' && github.ref_name == 'produkce'
+        run: npx --yes firebase-tools@15 deploy --only hosting --project "$PROJECT" --non-interactive
+      - name: Pravidla databáze (firestore.rules)
         if: env.HAS_KEY == 'true'
-        run: npx --yes firebase-tools@15 deploy --only hosting --project "${{ vars.FIREBASE_PROJECT_ID || 'mobil-majak' }}" --non-interactive
-      # Pravidla databáze: servisní účet potřebuje navíc roli „Service Usage Consumer“ (viz README).
-      # Když ji nemá, web se přesto nasadí a pravidla lze vložit ručně v konzoli.
-      - name: Nasazení pravidel databáze (firestore.rules)
-        if: env.HAS_KEY == 'true'
-        continue-on-error: true
-        run: npx --yes firebase-tools@15 deploy --only firestore:rules --project "${{ vars.FIREBASE_PROJECT_ID || 'mobil-majak' }}" --non-interactive
+        run: npx --yes firebase-tools@15 deploy --only firestore:rules --project "$PROJECT" --non-interactive
