@@ -31,7 +31,7 @@ async function compressPhoto(file: File): Promise<string> {
       i.onerror = () => fail(new Error('Tuto fotku se nepodařilo načíst. Zkuste jinou, nebo ji vyfoťte znovu.'));
       i.src = url;
     });
-    for (const [max, q] of [[1600, 0.82], [1280, 0.75], [1024, 0.7], [800, 0.65]] as const) {
+    for (const [max, q] of [[1280, 0.78], [1024, 0.72], [800, 0.65]] as const) {
       const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
       const c = document.createElement('canvas');
       c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
