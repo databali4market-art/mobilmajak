@@ -8,7 +8,8 @@ Statický web (Vite + React + TypeScript): 24 okének, která se odemykají kaž
 | --- | --- |
 | `src/content.ts` | obsah všech 24 okének; `confirm` = co je ještě potřeba potvrdit (zobrazí se jen v režimu `draft`) |
 | `src/config.ts` | Firebase, `DEMO_MODE`, `CONTENT_MODE`, klíč náhledu `PREVIEW_KEY` |
-| `src/components/Games.tsx` | kvízy (2, 6), řazení telefonů (16) a typový kvíz (20) |
+| `src/components/Games.tsx` | foto kvíz (2), kvíz (6), řazení telefonů přetahováním (16) a typový kvíz (20) |
+| `public/img/` | fotky k okénkům 2, 15 a 16 (zmenšené; názvy záměrně neprozrazují odpovědi) |
 | `src/styles.css` | design (barvy: navy `#1b2a5a`, růžová `#ea1d63`, azurová `#2bb3e6`) |
 | `src/components/Admin.tsx` | stránka `/?admin` – stažení e-mailů a soutěžních odpovědí do CSV |
 | `firestore.rules` | pravidla Firestore (soutěže ve dnech 5, 13, 19, přístup správců) |
@@ -28,8 +29,8 @@ npm run build    # výstup v dist/
 - **Testovací web**: preview kanál Firebase `test` (`https://mobil-majak--test-….web.app`, adresa je v logu GitHub Actions). Nasazuje se po každém pushi do **`main`**.
 - Tarif **Spark (zdarma)**: hosting 360 MB přenosu denně. První návštěva ≈ 340 kB, opakovaná ≈ 1 kB → zhruba 1 000 nových návštěvníků denně. Při blížícím se limitu (Firebase → Hosting → Usage) přepnout projekt na Blaze – web se pak nevypne, platí se 0,15 $/GB navíc.
 - **Přihlášení** jen přes Google (Firebase Authentication). Bez přihlášení se okénka neotevřou (pokud `DEMO_MODE = false`).
-- **Data** ve Firestore: `users/{uid}` (e-mail, jméno, otevřená okénka, souhlas s newsletterem vč. data a znění), `entries` (soutěžní odpovědi).
-- **E-maily** stahuje správce na `https://advent.mobilmajak.cz/?admin` jako CSV (newsletter / všichni přihlášení / soutěžní odpovědi).
+- **Data** ve Firestore: `users/{uid}` (e-mail, jméno, otevřená okénka, souhlas s newsletterem vč. data a znění), `entries` (soutěžní odpovědi vč. kontaktního e-mailu), `photos` (fotky rozbitých displejů ze soutěže 19 – zmenšený JPEG přímo v dokumentu, protože Cloud Storage na tarifu Spark nejde). Uzávěrky soutěží hlídá web i `firestore.rules`.
+- **E-maily** stahuje správce na `https://advent.mobilmajak.cz/?admin` jako CSV (newsletter / všichni přihlášení / soutěžní odpovědi); fotky ze soutěže 19 tamtéž tlačítkem „Fotky rozbitých displejů“ (klik = stažení).
 
 Stačí bezplatný tarif Firebase (Spark) – přihlášení a databáze mají vlastní, dostatečné limity. Kalendář má mít vlastní Firebase projekt, oddělený od jiných aplikací.
 

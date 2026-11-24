@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight, Eye, Gift, Snowflake, LogIn, Phone, Share2, Sparkles, Store, Wrench, Smartphone } from 'lucide-react';
-import { availableDay, BASE, CONTEST_DAYS, doors as ALL_DOORS, OPERATOR, PHONE, PRIVACY_URL, RULES_URL, SHOP } from './content';
+import { availableDay, BASE, BRANCHES_URL, CONTEST_DAYS, contestOpen, doors as ALL_DOORS, OPERATOR, PHONE, PRIVACY_URL, RULES_URL, SHOP } from './content';
 import { CONTENT_MODE, DEMO_MODE, PREVIEW_KEY } from './config';
 import { backend } from './backend';
 import type { Door, Progress, User } from './types';
@@ -168,7 +168,7 @@ export default function App() {
           <nav className="actions" aria-label="Ovládání">
             <button className="chip" onClick={share} aria-label="Sdílet kalendář"><Share2 size={16} /></button>
             {user || DEMO_MODE ? (
-              <button className="chip pink" onClick={() => setDrawer(true)}><Gift size={16} /><span>Moje kupóny</span>{openedCount > 0 && <b className="badge">{openedCount}</b>}</button>
+              <button className="chip pink" onClick={() => setDrawer(true)}><Gift size={16} /><span>Moje dárky</span>{openedCount > 0 && <b className="badge">{openedCount}</b>}</button>
             ) : (
               <button className="chip pink" onClick={() => setLogin({ open: true })}><LogIn size={16} /><span>Přihlásit</span></button>
             )}
@@ -224,7 +224,7 @@ export default function App() {
           <DoorGrid max={max} opened={openedMap} opening={opening} onOpen={openDoor} />
           <div className="legend" aria-hidden="true"><i className="t-offer" />Nabídka<i className="t-game" />Hra<i className="t-tip" />Tip<i className="t-contest" />Soutěž<i className="t-finale" />Finále</div>
           <div className="cal-foot">
-            {user ? <span>Přihlášeni jako <b>{user.email}</b> · <button className="link" onClick={() => setDrawer(true)}>Moje kupóny</button></span>
+            {user ? <span>Přihlášeni jako <b>{user.email}</b> · <button className="link" onClick={() => setDrawer(true)}>Moje dárky</button></span>
               : !DEMO_MODE && <button className="btn pink" onClick={() => setLogin({ open: true })}><LogIn size={17} /> Přihlásit se a začít</button>}
           </div>
         </section>
@@ -240,7 +240,7 @@ export default function App() {
 
         <section className="services wrap">
           <a href={SHOP + 'servis/'}><Wrench size={26} /><strong>Servis na počkání</strong><span>Displeje, baterie, čištění. Rychle a s náhradním telefonem.</span><ArrowUpRight size={18} /></a>
-          <a href={SHOP + 'kamenne-prodejny/'}><Store size={26} /><strong>Kamenné prodejny</strong><span>Kupóny z kalendáře vyřídíte na pobočce.</span><ArrowUpRight size={18} /></a>
+          <a href={BRANCHES_URL}><Store size={26} /><strong>Naše pobočky</strong><span>Kupóny z kalendáře vyřídíte na kterékoli ze šesti poboček.</span><ArrowUpRight size={18} /></a>
           <a href={SHOP}><Smartphone size={26} /><strong>E-shop</strong><span>Telefony, příslušenství i použité kousky.</span><ArrowUpRight size={18} /></a>
         </section>
 
@@ -257,14 +257,14 @@ export default function App() {
           <Logo light />
           <div className="footer-links">
             <a href={SHOP} target="_blank" rel="noreferrer">E-shop ↗</a>
-            <a href={SHOP + 'kamenne-prodejny/'} target="_blank" rel="noreferrer">Kde nás najdete ↗</a>
+            <a href={BRANCHES_URL} target="_blank" rel="noreferrer">Kde nás najdete ↗</a>
             <a href={'tel:' + PHONE.replace(/\s/g, '')}>{PHONE}</a>
             <a href={RULES_URL} target="_blank" rel="noreferrer">Pravidla soutěží</a>
             <a href={PRIVACY_URL} target="_blank" rel="noreferrer">Ochrana osobních údajů ↗</a>
           </div>
           <div id="soukromi" className="privacy">
             <h3>Soukromí</h3>
-            <p>Správcem osobních údajů je {OPERATOR.name} (Mobil Maják), IČ {OPERATOR.ico}. Pro přihlášení a ukládání dat používáme službu Firebase (Google). Ukládáme váš e-mail a jméno z účtu Google, která okénka jste otevřeli, soutěžní odpovědi a to, zda chcete dostávat novinky. Údaje slouží jen k provozu adventního kalendáře a vyhodnocení soutěží; e-mailem s novinkami vás oslovíme jen tehdy, pokud jste k tomu dali souhlas (odvolat ho můžete kdykoli v sekci Moje kupóny). Údaje z kalendáře uchováváme do 31. 3. 2027, kontakty se souhlasem do jeho odvolání. Web nepoužívá analytické ani reklamní cookies. Více v <a href={PRIVACY_URL} target="_blank" rel="noreferrer">zásadách ochrany osobních údajů</a>.</p>
+            <p>Správcem osobních údajů je {OPERATOR.name} (Mobil Maják), IČ {OPERATOR.ico}. Pro přihlášení a ukládání dat používáme službu Firebase (Google). Ukládáme váš e-mail a jméno z účtu Google, která okénka jste otevřeli, soutěžní odpovědi (u soutěže o nejhůř rozbitý displej i zaslanou fotku) a to, zda chcete dostávat novinky. Údaje slouží jen k provozu adventního kalendáře a vyhodnocení soutěží; e-mailem s novinkami vás oslovíme jen tehdy, pokud jste k tomu dali souhlas (odvolat ho můžete kdykoli v sekci Moje dárky). Údaje z kalendáře uchováváme do 31. 3. 2027 (soutěžní údaje 3 měsíce od vyhlášení výsledků), kontakty se souhlasem do jeho odvolání. Web nepoužívá analytické ani reklamní cookies. Více v <a href={PRIVACY_URL} target="_blank" rel="noreferrer">zásadách ochrany osobních údajů</a>.</p>
           </div>
           <small>© 2026 Mobil Maják · Provozovatel: {OPERATOR.name}, {OPERATOR.address}, IČ {OPERATOR.ico} · Okénka se odemykají o půlnoci (Europe/Prague)</small>
         </div>
@@ -272,6 +272,8 @@ export default function App() {
 
       <DoorModal
         door={door}
+        email={user?.email || ''}
+        preview={preview}
         draft={draft}
         entered={!!door && progress.entries.includes(door.day)}
         canPrev={!!door && door.day > 1}
@@ -289,12 +291,15 @@ export default function App() {
           notify(v ? 'Děkujeme! Novinky vám budeme posílat e-mailem.' : 'Dobře, nebudeme otravovat.');
           backend.answerNewsletterOffer(user, v).catch(() => notify('Nastavení se nepodařilo uložit.'));
         }}
-        onEnter={async (day, answer) => {
+        onEnter={async (day, answer, contact, photo) => {
           if (!user && !DEMO_MODE) throw new Error('Nejste přihlášeni.');
-          if (!CONTEST_DAYS.includes(day)) throw new Error('Soutěž v tomto okénku neprobíhá.');
+          const c = ALL_DOORS[day - 1]?.contest;
+          if (!CONTEST_DAYS.includes(day) || !c) throw new Error('Soutěž v tomto okénku neprobíhá.');
+          if (!preview && !contestOpen(c.until)) throw new Error('Tato soutěž už skončila.');
           const a = answer.trim();
           if (a.length < 1) throw new Error('Vyplňte prosím odpověď.');
-          if (user) await backend.submitEntry(user, day, a, preview);
+          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contact)) throw new Error('Zkontrolujte prosím e-mail.');
+          if (user) await backend.submitEntry(user, day, a, preview, { contact: contact.toLowerCase(), photo });
           setProgress((p) => { const n = { ...p, entries: [...p.entries, day] }; if (!user) saveGuest(n); return n; });
           setBurst((b) => b + 1);
         }}

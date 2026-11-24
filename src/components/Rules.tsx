@@ -1,5 +1,6 @@
 /**
  * Pravidla soutěží adventního kalendáře: stránka /?pravidla
+ * Znění podle listu „Pravidla soutěží“ v tabulce „Mobil Maják – adventní kalendář 2026“.
  */
 import { OPERATOR, PRIVACY_URL } from '../content';
 import { Logo } from './Decor';
@@ -11,40 +12,55 @@ export function Rules() {
         <a href="./" className="rules-logo"><Logo /></a>
         <h1>Pravidla soutěží Adventního kalendáře Mobil Maják 2026</h1>
 
-        <h2>1. Pořadatel</h2>
-        <p>Pořadatelem soutěží je společnost <b>{OPERATOR.name}</b>, se sídlem {OPERATOR.address}, IČ {OPERATOR.ico}, DIČ {OPERATOR.dic} (dále jen „pořadatel“). Kontakt: <a href={'mailto:' + OPERATOR.email}>{OPERATOR.email}</a>, {OPERATOR.phone}.</p>
+        <h2>Společná pravidla (platí pro všechny 3 soutěže)</h2>
 
-        <h2>2. Soutěže a doba konání</h2>
+        <h3>Pořadatel</h3>
+        <p>Pořadatelem soutěží v adventním kalendáři Mobil Maják je společnost <b>{OPERATOR.name}</b>, se sídlem {OPERATOR.address}, IČ: {OPERATOR.ico} (dále jen „pořadatel“).</p>
+
+        <h3>Kdo se může zapojit</h3>
+        <p>Soutěží se může zúčastnit fyzická osoba starší 18 let s doručovací adresou v České republice. Ze soutěží jsou vyloučeni zaměstnanci pořadatele a jejich blízké osoby.</p>
+
+        <h3>Podmínky účasti</h3>
+        <p>Účast je zdarma a není podmíněna nákupem. Do každé soutěže se může jeden účastník zapojit jen jednou, s jednou e-mailovou adresou. Odesláním přihlášky účastník souhlasí s těmito pravidly.</p>
+
+        <h3>Kontakt s výhercem</h3>
+        <p>Výherce pořadatel kontaktuje e-mailem uvedeným v přihlášce. Pokud výherce neodpoví do 3 dnů, výhra propadá a pořadatel stejným způsobem určí náhradního výherce.</p>
+
+        <h3>Výhra</h3>
+        <p>Výhru nelze vyměnit za peníze ani za jiné plnění. Výhru si výherce vyzvedne na kterékoli pobočce Mobil Maják, případně ji pořadatel po dohodě zašle poštou.</p>
+
+        <h3>Osobní údaje</h3>
+        <p>Pořadatel jako správce zpracovává e-mail účastníka (u soutěže o nejhůř rozbitý displej také zaslanou fotografii) za účelem organizace soutěže a kontaktování výherce, a to po dobu 3 měsíců od vyhlášení výsledků. Údaje nepředává dalším osobám. Účastník má právo na přístup ke svým údajům, jejich opravu, výmaz a omezení zpracování a může podat stížnost u Úřadu pro ochranu osobních údajů. Kontakt: <a href={'mailto:' + OPERATOR.email}>{OPERATOR.email}</a>. Více v <a href={PRIVACY_URL} target="_blank" rel="noreferrer">zásadách ochrany osobních údajů</a>.</p>
+
+        <h3>Ostatní</h3>
+        <p>Pořadatel může soutěž změnit nebo zrušit a vyloučit účastníka, který porušuje pravidla nebo jedná nepoctivě. Výhru nelze vymáhat soudní cestou. Dotazy k soutěžím: <a href={'mailto:' + OPERATOR.email}>{OPERATOR.email}</a>.</p>
+
+        <h2>Soutěž o sluchátka Marshall (okénko 5. 12.)</h2>
         <ul>
-          <li><b>Soutěž o bezdrátová sluchátka</b> (okénko 5. prosince): zapojit se lze od 5. 12. 2026 do 23. 12. 2026 23:59. Výhra: bezdrátová sluchátka Marshall Major V.</li>
-          <li><b>Kolik telefonů jsme letos opravili?</b> (okénko 13. prosince): tipy lze posílat od 13. 12. 2026 do 23. 12. 2026 23:59. Výhra: poukaz na servis v hodnotě 1 000 Kč.</li>
-          <li><b>Nejhůř rozbitý displej</b> (okénko 19. prosince): zapojit se lze od 19. 12. 2026 do 23. 12. 2026 23:59. Výhra: oprava displeje zdarma do hodnoty 3 000 Kč.</li>
+          <li><b>Doba konání:</b> od 5. 12. 2026 do 23. 12. 2026 do 23:59.</li>
+          <li><b>Jak se zapojit:</b> v okénku 5. 12. adventního kalendáře vyplnit e-mail a potvrdit souhlas s pravidly.</li>
+          <li><b>Výhra:</b> 1× bezdrátová sluchátka Marshall Major V, černá.</li>
+          <li><b>Výběr výherce:</b> výherce vylosujeme náhodně ze všech platných přihlášek 24. 12. 2026 a týž den mu pošleme e-mail.</li>
         </ul>
 
-        <h2>3. Kdo se může zapojit</h2>
-        <p>Soutěžit může fyzická osoba starší 15 let s doručovací adresou v České republice; osoba mladší 18 let se zapojuje se souhlasem zákonného zástupce. Ze soutěže jsou vyloučeni zaměstnanci pořadatele a jejich blízké osoby.</p>
-
-        <h2>4. Jak se zapojit</h2>
-        <p>Účastník se přihlásí do adventního kalendáře účtem Google a v okénku dané soutěže odešle svou odpověď (u soutěže o sluchátka stačí kliknout na „Zapojit se“). Do každé soutěže se lze zapojit jen jednou; odpověď nelze měnit. Účast je zdarma a nepodmiňuje ji žádný nákup.</p>
-
-        <h2>5. Určení výherců</h2>
+        <h2>Soutěž Kolik telefonů jsme letos opravili? (okénko 13. 12.)</h2>
         <ul>
-          <li><b>Sluchátka:</b> výherce vylosujeme náhodně ze všech zapojených 24. 12. 2026.</li>
-          <li><b>Počet oprav:</b> vyhrává tip nejbližší skutečnému počtu telefonů, které pořadatel opravil v roce 2026. Při shodném tipu rozhoduje dřívější čas odeslání. Výsledek vyhodnotíme do 15. 1. 2027.</li>
-          <li><b>Rozbitý displej:</b> nejhůř rozbitý displej vybere porota složená ze zaměstnanců pořadatele do 24. 12. 2026.</li>
+          <li><b>Doba konání:</b> od 13. 12. 2026 do 18. 12. 2026 do 23:59.</li>
+          <li><b>Jak se zapojit:</b> v okénku 13. 12. adventního kalendáře zadat číselný tip a e-mail a potvrdit souhlas s pravidly.</li>
+          <li><b>Výhra:</b> 1× poukaz na servis v pobočkách Mobil Maják v hodnotě 1 000 Kč, platný do 31. 1. 2027.</li>
+          <li><b>Výběr výherce:</b> vyhrává účastník, jehož tip je nejblíže počtu telefonů, které servis Mobil Maják opravil v roce 2026 podle evidence pořadatele. Při stejně blízkých tipech vyhrává ten, který byl odeslán dříve.</li>
+          <li><b>Vyhlášení:</b> výherce vyhlásíme 21. 12. 2026 a pošleme mu e-mail.</li>
         </ul>
 
-        <h2>6. Oznámení a předání výhry</h2>
-        <p>Výherce kontaktujeme e-mailem, který je spojený s jeho účtem Google, do 3 pracovních dnů od určení výherce. Pokud výherce do 14 dnů neodpoví, výhra propadá a pořadatel může určit náhradníka stejným způsobem. Výhru si výherce vyzvedne na kterékoli pobočce Mobil Maják, případně se domluvíme na zaslání. Výhru nelze vyměnit za peníze. Křestní jméno a první písmeno příjmení výherců můžeme zveřejnit na webu a sociálních sítích pořadatele.</p>
-
-        <h2>7. Fotografie</h2>
-        <p>U soutěže „Nejhůř rozbitý displej“ účastník odesláním fotografie potvrzuje, že ji sám pořídil, a souhlasí s jejím zveřejněním na webu a sociálních sítích pořadatele v souvislosti se soutěží.</p>
-
-        <h2>8. Osobní údaje</h2>
-        <p>Pořadatel zpracovává e-mail, jméno z účtu Google a soutěžní odpovědi za účelem provedení soutěže a předání výhry, a to do 31. 3. 2027. Více v <a href={PRIVACY_URL} target="_blank" rel="noreferrer">zásadách ochrany osobních údajů</a>.</p>
-
-        <h2>9. Závěrečná ustanovení</h2>
-        <p>Pořadatel si vyhrazuje právo pravidla změnit nebo soutěž zrušit či přerušit; změnu zveřejní na této stránce. Pořadatel může vyloučit účastníka, který jedná v rozporu s pravidly nebo dobrými mravy (např. zakládá více účtů). Na výhru není právní nárok. Soutěž není hazardní hrou podle zákona č. 186/2016 Sb.</p>
+        <h2>Soutěž o nejhůř rozbitý displej (okénko 19. 12.)</h2>
+        <ul>
+          <li><b>Doba konání:</b> od 19. 12. 2026 do 22. 12. 2026 do 23:59.</li>
+          <li><b>Jak se zapojit:</b> v okénku 19. 12. adventního kalendáře nahrát fotografii rozbitého displeje vlastního telefonu, vyplnit e-mail a potvrdit souhlas s pravidly. Fotografie musí být vlastní a neupravená.</li>
+          <li><b>Výhra:</b> oprava telefonu výherce na pobočce Mobil Maják zdarma do hodnoty 3 000 Kč. Je-li oprava dražší, výherce doplatí rozdíl. Opravu je třeba uplatnit do 31. 1. 2027.</li>
+          <li><b>Výběr výherce:</b> výherce vybere komise pořadatele podle toho, který displej je na fotografii nejvíc poškozený.</li>
+          <li><b>Fotografie:</b> účastník uděluje pořadateli bezplatný a nevýhradní souhlas se zveřejněním zaslané fotografie bez uvedení jména na webu a sociálních sítích Mobil Maják.</li>
+          <li><b>Vyhlášení:</b> výherce vyhlásíme 23. 12. 2026 a pošleme mu e-mail.</li>
+        </ul>
 
         <p className="muted">Platné od 1. 12. 2026.</p>
         <a href="./" className="btn primary">Zpět do kalendáře</a>

@@ -32,7 +32,7 @@ export function GiftsDrawer({ open, user, newsletter, doors, onClose, onPick, on
         <header>
           <div>
             <div className="eyebrow">Váš účet</div>
-            <h2 id="gifts-title">Moje kupóny</h2>
+            <h2 id="gifts-title">Moje dárky</h2>
             {user && <div className="drawer-user">{user.email}</div>}
           </div>
           <button className="modal-close static" aria-label="Zavřít" onClick={onClose}><X size={20} /></button>
@@ -43,8 +43,8 @@ export function GiftsDrawer({ open, user, newsletter, doors, onClose, onPick, on
             <h3>Kupóny na pobočku</h3>
             {codes.map((d) => (
               <div className="mini-coupon" key={d.day}>
-                <div><span>{d.day}. prosince</span><code>{d.coupon!.code}</code></div>
-                <button aria-label={`Kopírovat kód ${d.coupon!.code}`} onClick={() => onCopy(d.coupon!.code)}><Copy size={16} /></button>
+                <div><span>{d.day}. prosince</span>{d.coupon!.code ? <code>{d.coupon!.code}</code> : <button className="link" onClick={() => onPick(d.day)}>Tajný kupón – ukázat okénko</button>}</div>
+                {d.coupon!.code && <button aria-label={`Kopírovat kód ${d.coupon!.code}`} onClick={() => onCopy(d.coupon!.code!)}><Copy size={16} /></button>}
               </div>
             ))}
           </section>

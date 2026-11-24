@@ -4,8 +4,8 @@
  * Data vydá jen databáze podle firestore.rules (funkce isAdmin), seznam v config.ts jen řídí, co se ukáže.
  */
 import { useEffect, useState } from 'react';
-import { Download, LogOut, RefreshCw } from 'lucide-react';
-import { backend, type ExportData } from '../backend';
+import { Download, Image as ImageIcon, LogOut, RefreshCw } from 'lucide-react';
+import { backend, type ExportData, type PhotoRow } from '../backend';
 import { ADMIN_EMAILS } from '../config';
 import type { User } from '../types';
 import { Logo } from './Decor';
@@ -35,6 +35,7 @@ export function Admin() {
   const [data, setData] = useState<ExportData | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [photos, setPhotos] = useState<PhotoRow[] | null>(null);
 
   useEffect(() => {
     let off: (() => void) | undefined;
@@ -73,9 +74,16 @@ export function Admin() {
   }
   function dlEntries() {
     download(`soutezni-odpovedi-${stamp()}.csv`, toCsv(
-      ['den', 'email', 'jmeno', 'odpoved', 'odeslano'],
-      data!.entries.map((r) => [r.day, r.email, r.name, r.answer, fmt(r.createdAt)]),
+      ['den', 'kontaktni_email', 'ucet_google', 'jmeno', 'odpoved', 'fotka', 'odeslano'],
+      data!.entries.map((r) => [r.day, r.contact, r.email, r.name, r.answer, r.hasPhoto, fmt(r.createdAt)]),
     ));
+  }
+
+  async function loadPhotos() {
+    setBusy(true); setError('');
+    try { setPhotos(await backend.exportPhotos()); }
+    catch (e) { setError((e as Error).message); }
+    finally { setBusy(false); }
   }
 
   return (
@@ -111,8 +119,23 @@ export function Admin() {
                 <button className="btn primary" onClick={dlNewsletter} disabled={!data || busy}><Download size={16} /> E-maily pro newsletter (CSV)</button>
                 <button className="btn ghost-dark" onClick={dlAll} disabled={!data || busy}><Download size={16} /> Všichni přihlášení (CSV)</button>
                 <button className="btn ghost-dark" onClick={dlEntries} disabled={!data || busy}><Download size={16} /> Soutěžní odpovědi (CSV)</button>
+                <button className="btn ghost-dark" onClick={loadPhotos} disabled={busy}><ImageIcon size={16} /> Fotky rozbitých displejů (19. 12.)</button>
                 <button className="btn ghost-dark" onClick={load} disabled={busy}><RefreshCw size={16} /> {busy ? 'Načítám…' : 'Obnovit'}</button>
               </div>
+              {photos && (
+                photos.length === 0 ? <p className="muted">Zatím žádné fotky.</p> : (
+                  <ul className="admin-photos">
+                    {photos.map((ph, k) => (
+                      <li key={ph.id}>
+                        <a href={ph.photo} download={`displej-${String(k + 1).padStart(3, '0')}-${ph.contact.replace(/[^a-z0-9]+/gi, '_')}.jpg`} title="Stáhnout">
+                          <img src={ph.photo} alt={'Fotka od ' + ph.contact} loading="lazy" />
+                        </a>
+                        <span>{ph.contact}</span><small>{fmt(ph.createdAt)}</small>
+                      </li>
+                    ))}
+                  </ul>
+                )
+              )}
               <p className="legal">Do newsletteru patří jen soubor „E-maily pro newsletter“ – lidé, kteří souhlas zaškrtli. Ostatní adresy smíte použít jen pro kalendář a kontakt s výherci.</p>
               <button className="link" onClick={() => backend.signOut()}>Odhlásit</button>
             </>

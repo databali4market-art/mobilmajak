@@ -20,16 +20,22 @@ export interface Backend {
   signOut(): Promise<void>;
   load(u: User, preview: boolean): Promise<Progress>;
   markOpened(u: User, day: number, preview: boolean): Promise<void>;
-  submitEntry(u: User, day: number, answer: string, preview: boolean): Promise<void>;
+  /** soutěžní odpověď; contact = e-mail pro kontakt s výhercem, photo = JPEG jako data URL (soutěž 19) */
+  submitEntry(u: User, day: number, answer: string, preview: boolean, extra: EntryExtra): Promise<void>;
   setNewsletter(u: User, v: boolean): Promise<void>;
   /** odpověď na jednorázovou nabídku newsletteru po otevření okénka */
   answerNewsletterOffer(u: User, v: boolean): Promise<void>;
   /** jen pro správce (ADMIN_EMAILS + firestore.rules): všechny kontakty a soutěžní odpovědi */
   exportData(): Promise<ExportData>;
+  /** jen pro správce: fotky ze soutěže o nejhůř rozbitý displej */
+  exportPhotos(): Promise<PhotoRow[]>;
 }
 
+export interface EntryExtra { contact: string; photo?: string }
+
 export interface ContactRow { email: string; name: string; newsletter: boolean; consentStatus: string; newsletterAt: string; newsletterConsent: string; revokedAt: string; createdAt: string; lastSeenAt: string; opened: number }
-export interface EntryRow { day: number; email: string; name: string; answer: string; createdAt: string }
+export interface EntryRow { id: string; day: number; email: string; name: string; contact: string; answer: string; hasPhoto: boolean; createdAt: string }
+export interface PhotoRow { id: string; contact: string; email: string; photo: string; createdAt: string }
 export interface ExportData { contacts: ContactRow[]; entries: EntryRow[] }
 
 /* ------------------------------------------------------------------ local */
@@ -62,6 +68,7 @@ function localBackend(): Backend {
     async setNewsletter(u, v) { const p = getP(u, false); p.newsletter = v; setP(u, false, p); },
     async answerNewsletterOffer(u, v) { const p = getP(u, false); p.newsletter = p.newsletter || v; p.newsletterAsked = true; setP(u, false, p); },
     async exportData() { throw new Error('Export funguje až s nastaveným Firebase.'); },
+    async exportPhotos() { throw new Error('Export funguje až s nastaveným Firebase.'); },
   };
 }
 
@@ -141,14 +148,18 @@ function firebaseBackend(): Backend {
       const { db, fs } = await sdk;
       await fs.setDoc(fs.doc(db, 'users', u.uid), { [userField(preview)]: { [day]: new Date().toISOString() } }, { merge: true });
     },
-    async submitEntry(u, day, answer, preview) {
+    async submitEntry(u, day, answer, preview, extra) {
       const { db, fs } = await sdk;
       const id = `${u.uid}_${preview ? 'nahled_' : ''}${day}`;
-      const ref = fs.doc(db, 'entries', id);
+      const now = fs.serverTimestamp();
+      // odpověď i fotka se zapíší najednou (buď obojí, nebo nic)
+      const batch = fs.writeBatch(db);
+      batch.set(fs.doc(db, 'entries', id), { uid: u.uid, email: u.email, name: u.name, contact: extra.contact, day, answer, preview, hasPhoto: !!extra.photo, createdAt: now });
+      if (extra.photo) batch.set(fs.doc(db, 'photos', id), { uid: u.uid, email: u.email, contact: extra.contact, day, preview, photo: extra.photo, createdAt: now });
       try {
-        await fs.setDoc(ref, { uid: u.uid, email: u.email, name: u.name, day, answer, preview, createdAt: fs.serverTimestamp() });
+        await batch.commit();
       } catch (e) {
-        if ((e as { code?: string }).code === 'permission-denied') throw new Error('V tomto okénku už vaši odpověď máme. Držíme palce!');
+        if ((e as { code?: string }).code === 'permission-denied') throw new Error('Odpověď se nepodařilo uložit. Buď ji už máme, nebo soutěž skončila.');
         throw new Error('Odpověď se nepodařilo uložit. Zkuste to prosím znovu.');
       }
       await fs.setDoc(fs.doc(db, 'users', u.uid), { [entriesField(preview)]: fs.arrayUnion(day) }, { merge: true });
@@ -176,9 +187,22 @@ function firebaseBackend(): Backend {
         return { email: x.email || '', name: x.name || '', newsletter: !!x.newsletter, consentStatus, newsletterAt: x.newsletter ? iso(x.newsletterAt) : '', newsletterConsent: x.newsletter ? x.newsletterConsent || '' : '', revokedAt: !x.newsletter ? iso(x.newsletterRevokedAt) : '', createdAt: iso(x.createdAt), lastSeenAt: iso(x.lastSeenAt), opened: Object.keys(x.opened || {}).length };
       }).sort((p, q) => p.createdAt.localeCompare(q.createdAt));
       const rows: EntryRow[] = entries.docs.map((d) => d.data()).filter((x) => !x.preview)
-        .map((x) => ({ day: x.day, email: x.email || '', name: x.name || '', answer: x.answer || '', createdAt: iso(x.createdAt) }))
+        .map((x) => ({ id: '', day: x.day, email: x.email || '', name: x.name || '', contact: x.contact || x.email || '', answer: x.answer || '', hasPhoto: !!x.hasPhoto, createdAt: iso(x.createdAt) }))
         .sort((p, q) => p.day - q.day || p.createdAt.localeCompare(q.createdAt));
       return { contacts, entries: rows };
+    },
+    async exportPhotos() {
+      const { db, fs } = await sdk;
+      const iso = (v: unknown) => (v && typeof (v as { toDate?: () => Date }).toDate === 'function' ? (v as { toDate: () => Date }).toDate().toISOString() : '');
+      try {
+        const snap = await fs.getDocs(fs.collection(db, 'photos'));
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((x) => !(x as { preview?: boolean }).preview)
+          .map((x) => { const y = x as Record<string, unknown>; return { id: String(y.id), email: String(y.email || ''), contact: String(y.contact || y.email || ''), photo: String(y.photo || ''), createdAt: iso(y.createdAt) }; })
+          .sort((p, q) => p.createdAt.localeCompare(q.createdAt));
+      } catch (e) {
+        if ((e as { code?: string }).code === 'permission-denied') throw new Error('Tento účet nemá přístup k fotkám (ADMIN_EMAILS a firestore.rules).');
+        throw new Error('Fotky se nepodařilo načíst.');
+      }
     },
   };
 }
