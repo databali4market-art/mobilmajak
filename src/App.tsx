@@ -49,6 +49,8 @@ function saveGuest(p: Progress) { try { localStorage.setItem(GUEST_KEY, JSON.str
 
 export default function App() {
   const [preview, setPreview] = useState(() => DEMO_MODE || readPreview());
+  /** bez přihlášení: ukázková verze nebo náhled (?nahled=…) – postup se ukládá jen v prohlížeči */
+  const guest = DEMO_MODE || preview;
   const [today, setToday] = useState(() => availableDay());
   const max = preview ? 24 : today;
   const [user, setUser] = useState<User | null>(null);
@@ -77,7 +79,7 @@ export default function App() {
   }, [notify]);
 
   useEffect(() => {
-    if (!user) { setProgress(DEMO_MODE ? loadGuest() : EMPTY); return; }
+    if (!user) { setProgress(guest ? loadGuest() : EMPTY); return; }
     backend.load(user, preview).then(setProgress).catch(() => notify('Nepodařilo se načíst váš postup. Zkuste obnovit stránku.'));
   }, [user, preview, notify]);
 
@@ -93,7 +95,7 @@ export default function App() {
   const openDoor = useCallback(async (day: number, el?: HTMLElement) => {
     if (el) trigger.current = el;
     if (day > max) { notify(`Okénko ${day} se odemkne ${day}. prosince o půlnoci.`); return; }
-    if (!user && !DEMO_MODE) { setLogin({ open: true, reason: 'Přihlaste se a otevřete okénko', pendingDay: day }); return; }
+    if (!user && !guest) { setLogin({ open: true, reason: 'Přihlaste se a otevřete okénko', pendingDay: day }); return; }
     if (!progress.opened[day]) {
       setOpening(day);
       await new Promise((r) => setTimeout(r, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 550));
@@ -150,7 +152,7 @@ export default function App() {
     <>
       {preview && (
         <div className="preview-bar">
-          <Eye size={15} /> {DEMO_MODE ? 'Ukázková verze pro prezentaci – všechna okénka lze proklikat bez přihlášení' : 'Náhled: všechna okénka odemčená'}{draft ? ' · obsah je ukázkový, poznámky „K potvrzení“ zmizí po přepnutí na ostrý režim' : ''}
+          <Eye size={15} /> {DEMO_MODE ? 'Ukázková verze pro prezentaci – všechna okénka lze proklikat bez přihlášení' : 'Náhled: všechna okénka odemčená, lze proklikat bez přihlášení (postup se ukládá jen v tomto prohlížeči)'}{draft ? ' · obsah je ukázkový, poznámky „K potvrzení“ zmizí po přepnutí na ostrý režim' : ''}
           {!DEMO_MODE && <button onClick={() => { try { sessionStorage.removeItem(SS + 'nahled'); } catch { /* */ } setPreview(false); }}>Ukončit</button>}
         </div>
       )}
@@ -167,7 +169,7 @@ export default function App() {
           <a className="call" href={'tel:' + PHONE.replace(/\s/g, '')}><Phone size={22} /><span><b>{PHONE} <i>online</i></b><small>Zavolejte nám (Po–Pá 9–17)</small></span></a>
           <nav className="actions" aria-label="Ovládání">
             <button className="chip" onClick={share} aria-label="Sdílet kalendář"><Share2 size={16} /></button>
-            {user || DEMO_MODE ? (
+            {user || guest ? (
               <button className="chip pink" onClick={() => setDrawer(true)}><Gift size={16} /><span>Moje dárky</span>{openedCount > 0 && <b className="badge">{openedCount}</b>}</button>
             ) : (
               <button className="chip pink" onClick={() => setLogin({ open: true })}><LogIn size={16} /><span>Přihlásit</span></button>
@@ -187,8 +189,8 @@ export default function App() {
             <h1><span className="hl">Advent</span><br />plný slev, her<br />a překvapení</h1>
             <p>24 dní, 24 okének. Každý den o půlnoci se odemkne nová nabídka, hra, tip nebo soutěž. Odměny na vás čekají na pobočkách Mobil Maják.</p>
             <div className="hero-cta">
-              <a href="#kalendar" className="btn pink big">{user || DEMO_MODE ? 'Ke kalendáři' : 'Vstoupit do kalendáře'} <ArrowRight size={18} /></a>
-              {!user && !DEMO_MODE && <button className="btn ghost" onClick={() => setLogin({ open: true })}><LogIn size={17} /> Přihlásit se</button>}
+              <a href="#kalendar" className="btn pink big">{user || guest ? 'Ke kalendáři' : 'Vstoupit do kalendáře'} <ArrowRight size={18} /></a>
+              {!user && !guest && <button className="btn ghost" onClick={() => setLogin({ open: true })}><LogIn size={17} /> Přihlásit se</button>}
             </div>
           </div>
           <HeroArt />
@@ -216,7 +218,7 @@ export default function App() {
           </div>
           <div className="cal-bar">
             <div className="progress">
-              <span>{user || DEMO_MODE ? <><b>{openedCount}</b> z 24 okének otevřeno</> : 'Přihlaste se a začněte otevírat'}</span>
+              <span>{user || guest ? <><b>{openedCount}</b> z 24 okének otevřeno</> : 'Přihlaste se a začněte otevírat'}</span>
               <div className="track"><i style={{ width: `${(openedCount / 24) * 100}%` }} /></div>
             </div>
             <span className="status">{status}</span>
@@ -225,7 +227,7 @@ export default function App() {
           <div className="legend" aria-hidden="true"><i className="t-offer" />Nabídka<i className="t-game" />Hra<i className="t-tip" />Tip<i className="t-contest" />Soutěž<i className="t-finale" />Finále</div>
           <div className="cal-foot">
             {user ? <span>Přihlášeni jako <b>{user.email}</b> · <button className="link" onClick={() => setDrawer(true)}>Moje dárky</button></span>
-              : !DEMO_MODE && <button className="btn pink" onClick={() => setLogin({ open: true })}><LogIn size={17} /> Přihlásit se a začít</button>}
+              : !guest && <button className="btn pink" onClick={() => setLogin({ open: true })}><LogIn size={17} /> Přihlásit se a začít</button>}
           </div>
         </section>
 
@@ -292,7 +294,7 @@ export default function App() {
           backend.answerNewsletterOffer(user, v).catch(() => notify('Nastavení se nepodařilo uložit.'));
         }}
         onEnter={async (day, answer, contact, photo) => {
-          if (!user && !DEMO_MODE) throw new Error('Nejste přihlášeni.');
+          if (!user && !guest) throw new Error('Nejste přihlášeni.');
           const c = ALL_DOORS[day - 1]?.contest;
           if (!CONTEST_DAYS.includes(day) || !c) throw new Error('Soutěž v tomto okénku neprobíhá.');
           if (!preview && !contestOpen(c.until)) throw new Error('Tato soutěž už skončila.');
